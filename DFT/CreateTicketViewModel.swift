@@ -7,6 +7,8 @@
 //
 
 import Foundation
+
+typealias JSON = [String : Any]
 class CreateTicketViewModel {
     var tableViewModel : [CellModel]?
     
@@ -22,11 +24,17 @@ class CreateTicketViewModel {
             model.append(CellModel(labelName: "EndDetails", inputType: .TextField, identifier: "EndDetails", dequeCell: "DFTDateTimeTableViewCell"))
 
             self.tableViewModel = model
-            
+        case .Attachment:
+            var model = [CellModel]()
+            model.append(CellModel(labelName: "Comments", inputType: .TextView, identifier: "Comments", dequeCell: "DFTCommentsTableViewCell"))
+            model.append(CellModel(labelName: "GalleryView", inputType: .ImagePicker, identifier: "GalleryView", dequeCell: "DFTGalleryTableViewCell"))
+            self.tableViewModel = model
         default:
             print("Invalid DFT Type received while creating CreateTicketViewModel")
         }
     }
+
+
 }
 class CellModel {
     var labelName : String
@@ -46,9 +54,12 @@ class CellModel {
 enum CellInputType {
     case TextField
     case ValuePicker
+    case TextView
     case DatePicker
+    case ImagePicker
 }
 enum DFTType {
     case GeneralDFT
     case SaltwaterDisposal
+    case Attachment
 }

@@ -29,6 +29,7 @@ class DFTDateTimeTableViewCell: UITableViewCell {
         case "StartDetails":
             self.label1.text = "Start Date"
             self.label2.text = "End Time"
+
         case "EndDetails":
             self.label1.text = "End Date"
             self.label2.text = "End Time"
@@ -37,5 +38,7 @@ class DFTDateTimeTableViewCell: UITableViewCell {
         default:
             print("Invalind Cell identifier")
         }
+        self.textField1.placeholder = "--Select--"
+        self.textField2.placeholder = "--Select--"
     }
 }

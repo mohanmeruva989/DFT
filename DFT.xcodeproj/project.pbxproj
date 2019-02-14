@@ -10,6 +10,8 @@
 		01757D8622155360001A2ACF /* DFTCreateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D8522155360001A2ACF /* DFTCreateTableViewCell.swift */; };
 		01757D88221564E9001A2ACF /* CreateTicketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D87221564E9001A2ACF /* CreateTicketViewModel.swift */; };
 		01757D8A2215761A001A2ACF /* DFTDateTimeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D892215761A001A2ACF /* DFTDateTimeTableViewCell.swift */; };
+		01757D8C22157EF0001A2ACF /* DFTCommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D8B22157EF0001A2ACF /* DFTCommentsTableViewCell.swift */; };
+		01757D8E22157F25001A2ACF /* DFTGalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D8D22157F25001A2ACF /* DFTGalleryTableViewCell.swift */; };
 		01971A97221038590088F991 /* DFTAllTicketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01971A96221038590088F991 /* DFTAllTicketsViewController.swift */; };
 		01971A9B221039CD0088F991 /* TicketCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01971A99221039CD0088F991 /* TicketCell.xib */; };
 		01971A9C221039CD0088F991 /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01971A9A221039CD0088F991 /* TicketCell.swift */; };
@@ -87,6 +89,8 @@
 		01757D8522155360001A2ACF /* DFTCreateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTCreateTableViewCell.swift; sourceTree = "<group>"; };
 		01757D87221564E9001A2ACF /* CreateTicketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTicketViewModel.swift; sourceTree = "<group>"; };
 		01757D892215761A001A2ACF /* DFTDateTimeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTDateTimeTableViewCell.swift; sourceTree = "<group>"; };
+		01757D8B22157EF0001A2ACF /* DFTCommentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTCommentsTableViewCell.swift; sourceTree = "<group>"; };
+		01757D8D22157F25001A2ACF /* DFTGalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTGalleryTableViewCell.swift; sourceTree = "<group>"; };
 		01971A96221038590088F991 /* DFTAllTicketsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DFTAllTicketsViewController.swift; sourceTree = "<group>"; };
 		01971A99221039CD0088F991 /* TicketCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TicketCell.xib; path = DFT/TicketCell.xib; sourceTree = SOURCE_ROOT; };
 		01971A9A221039CD0088F991 /* TicketCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TicketCell.swift; path = DFT/TicketCell.swift; sourceTree = SOURCE_ROOT; };
@@ -163,6 +167,8 @@
 				01971A99221039CD0088F991 /* TicketCell.xib */,
 				01757D8522155360001A2ACF /* DFTCreateTableViewCell.swift */,
 				01757D892215761A001A2ACF /* DFTDateTimeTableViewCell.swift */,
+				01757D8B22157EF0001A2ACF /* DFTCommentsTableViewCell.swift */,
+				01757D8D22157F25001A2ACF /* DFTGalleryTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -481,6 +487,7 @@
 				7A9F6FF61F3883D3000A1815 /* SAPFioriLoadingIndicator.swift in Sources */,
 				7A26CA1C1F31BA8800B156B6 /* CellCreationHelper.swift in Sources */,
 				12E07EF21E96851800460A94 /* CollectionType.swift in Sources */,
+				01757D8C22157EF0001A2ACF /* DFTCommentsTableViewCell.swift in Sources */,
 				75AC42D41DAF824D00B445FF /* CollectionsViewController.swift in Sources */,
 				7A1315B91D4B982000A5DA56 /* AppDelegate.swift in Sources */,
 				48B89E13BC056A68C5A69562 /* GetFieldTicketDetailsStaticResolver.swift in Sources */,
@@ -504,6 +511,7 @@
 				01757D88221564E9001A2ACF /* CreateTicketViewModel.swift in Sources */,
 				01757D8622155360001A2ACF /* DFTCreateTableViewCell.swift in Sources */,
 				01971A9C221039CD0088F991 /* TicketCell.swift in Sources */,
+				01757D8E22157F25001A2ACF /* DFTGalleryTableViewCell.swift in Sources */,
 				B16C27AAEC31374D2DEC4E5A /* DFTHeaderTypeMasterViewController.swift in Sources */,
 				BEFF12329C5DDCD121D4E801 /* DFTHeaderTypeDetailViewController.swift in Sources */,
 				01757D8A2215761A001A2ACF /* DFTDateTimeTableViewCell.swift in Sources */,
