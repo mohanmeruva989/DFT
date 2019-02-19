@@ -10,6 +10,7 @@ import UIKit
 
 class DFTCommentsTableViewCell: UITableViewCell {
 
+    @IBOutlet var commentsTextView: UITextView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

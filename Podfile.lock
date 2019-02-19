@@ -1,16 +1,25 @@
 PODS:
   - Alamofire (4.8.0)
+  - AlamofireImage (3.4.1):
+    - Alamofire (~> 4.7)
+  - NohanaImagePicker (0.9.0)
 
 DEPENDENCIES:
   - Alamofire
+  - AlamofireImage
+  - NohanaImagePicker
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - AlamofireImage
+    - NohanaImagePicker
 
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
+  NohanaImagePicker: b39fa5623cabab69597ea6f6a2d6729b9895cd2b
 
-PODFILE CHECKSUM: 13f137cb8838ffcfa132932d94c964afb83655a0
+PODFILE CHECKSUM: 5d6402cc376f6c9fa52ddee9a363e7ad33f0f226
 
 COCOAPODS: 1.5.3

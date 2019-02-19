@@ -19,7 +19,7 @@ class CreateTicketViewModel {
             model.append(CellModel(labelName: "Vendor Ref No", inputType: .TextField, identifier: "VendorRefNo", dequeCell: "DFTCreateTableViewCell"))
             model.append(CellModel(labelName: "Department", inputType: .ValuePicker, identifier: "Department", dequeCell: "DFTCreateTableViewCell"))
             model.append(CellModel(labelName: "Location", inputType: .TextField, identifier: "Location", dequeCell: "DFTCreateTableViewCell"))
-            model.append(CellModel(labelName: "MurphyReviewer", inputType: .TextField, identifier: "MurphyReviewer", dequeCell: "DFTCreateTableViewCell"))
+            model.append(CellModel(labelName: "Reviewer", inputType: .TextField, identifier: "Reviewer", dequeCell: "DFTCreateTableViewCell"))
             model.append(CellModel(labelName: "StartDetails", inputType: .TextField, identifier: "StartDetails", dequeCell: "DFTDateTimeTableViewCell"))
             model.append(CellModel(labelName: "EndDetails", inputType: .TextField, identifier: "EndDetails", dequeCell: "DFTDateTimeTableViewCell"))
 
@@ -41,6 +41,7 @@ class CellModel {
     var inputType : CellInputType
     var identifier : String
     var dequeCell : String
+    var inputValue : Any?
     init(labelName : String , inputType : CellInputType , identifier : String , dequeCell : String) {
         self.labelName = labelName
         self.inputType = inputType

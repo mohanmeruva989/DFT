@@ -147,7 +147,7 @@ class OnboardingManager {
     }
 
     /// Resets the Onboarding flow and than calls `onboardOrRestoreWithoutSplashScreen` to start a new flow.
-    private func resetOnboarding() {
+    public func resetOnboarding() {
         self.logger.info("Resetting...")
 
         guard let onboardingID = self.onboardingID else {

@@ -7,8 +7,8 @@ target 'DFT' do
 
   # Pods for DFT
     pod 'Alamofire'
-#    pod 'AlamofireImage'
-#    pod 'NohanaImagePicker'
+    pod 'AlamofireImage'
+    pod 'NohanaImagePicker'
 #    pod 'Letters'
 #    pod 'ReachabilitySwift'
 #    pod 'Fabric'

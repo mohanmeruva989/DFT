@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SAPFiori
 
 
 class DFTAllTicketsViewController: UIViewController {
@@ -15,8 +16,11 @@ class DFTAllTicketsViewController: UIViewController {
     var allTickets : [DFTHeaderType] = [DFTHeaderType]()
     var filteredTickets : [DFTHeaderType]? = nil
     var refreshControl = UIRefreshControl()
+    var selectedTicketNumber : String?
+    var selectedTicket : DFTHeaderType?
+    let modalLoadingIndicatorView = FUIModalLoadingIndicatorView()
     public var loadEntitiesBlock: ((_ completionHandler: @escaping ([DFTHeaderType]?, Error?) -> Void) -> Void)?
-    lazy var searchController: UISearchController = {
+    lazy  var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         // Setup the Search Controller
         searchController.delegate = self
@@ -25,7 +29,6 @@ class DFTAllTicketsViewController: UIViewController {
         searchController.searchBar.placeholder = "Search for DFT's "
         searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchBar.delegate = self
-        searchController.searchBar.setImage(UIImage(named: "qrcode"), for: .bookmark, state: .normal)
         return searchController
     }()
     @IBOutlet var addNewTicketButton: UIButton!
@@ -36,8 +39,10 @@ class DFTAllTicketsViewController: UIViewController {
         //Animate the searchBar
         UIView.animate(withDuration: 0.3) {
             self.navigationItem.searchController = self.searchController
-            self.searchController.isActive = true
         }
+        self.navigationItem.searchController?.searchBar.becomeFirstResponder()
+        self.searchController.isActive = true
+
         self.view.layoutIfNeeded()
 
     }
@@ -61,12 +66,15 @@ class DFTAllTicketsViewController: UIViewController {
     }
     
     func requestEntities(completionHandler: @escaping (Error?) -> Void) {
+        self.modalLoadingIndicatorView.show(inView: self.view, animated: true)
         self.loadEntitiesBlock!() { entities, error in
+            self.modalLoadingIndicatorView.dismiss()
             if let error = error {
                 completionHandler(error)
                 return
             }
             self.allTickets = entities!
+            self.allTickets = self.allTickets.sorted{ $0.dftNumber! > $1.dftNumber! }
             completionHandler(nil)
         }
     }
@@ -113,6 +121,22 @@ extension DFTAllTicketsViewController : UITableViewDataSource{
     }
     
 }
+extension DFTAllTicketsViewController : UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if User.shared.role == UserRole.Reviewer {
+            self.selectedTicketNumber = String(self.allTickets[indexPath.row].dftNumber!)
+            self.selectedTicket = self.allTickets[indexPath.row]
+            self.performSegue(withIdentifier: "TicketDetail", sender: self)
+        }
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "TicketDetail"{
+           var dest = segue.destination as! DFTTicketDetailViewController
+            dest.title = self.selectedTicketNumber
+            dest.ticket = self.selectedTicket
+        }
+    }
+}
 extension DFTAllTicketsViewController : UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         let searchText : String = searchController.searchBar.text ?? ""
@@ -130,6 +154,11 @@ extension DFTAllTicketsViewController : UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.updateSearchResults(for: self.searchController)
     }
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        self.navigationItem.searchController = nil
+        return true
+    }
+    
 }
 extension DFTAllTicketsViewController : UISearchControllerDelegate{
     

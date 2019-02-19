@@ -43,42 +43,60 @@ class TicketCell: UITableViewCell {
     {
         
         ticketTitleLabel.text = String(ticketHeader.dftNumber!)
-        departmentLabel.text = ticketHeader.department
+
+        if ticketHeader.department == "" {
+            departmentLabel.text = " - "
+        }else{
+            departmentLabel.text = ticketHeader.department
+        }
+
         locationKeyValue.sizeToFit()
         locationLabel.text = ticketHeader.location ?? ""
         
-//        if ticket.Location != ""{
-//            locationLabel.text = ticket.Location
-//        }
-//        else{
-//            locationLabel.text = "   -   "
-//        }
-        vendorRefLabel.text = ticketHeader as? String
-//        if ticket.Status == TicketStatus.Create.rawValue{
-//            markerView.backgroundColor = UIColor(red : 246/255, green : 142/255, blue : 86/255, alpha : 1)
-//        }
-//        else if ticket.Status == TicketStatus.Reject.rawValue{
-//            markerView.backgroundColor = UIColor.red
-//        }
-//        else if ticket.Status == TicketStatus.Review.rawValue{
-//            markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
-//        }
-//        else if ticket.Status == TicketStatus.Verify.rawValue{
-//            markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
-//        }
-//        else {
-//            markerView.backgroundColor = UIColor.darkGray
-//        }
+        if ticketHeader.location != ""{
+            locationLabel.text = ticketHeader.location
+        }
+        else{
+            locationLabel.text = "   -   "
+        }
+        if ticketHeader.status == "Created"{
+            markerView.backgroundColor = UIColor(red : 246/255, green : 142/255, blue : 86/255, alpha : 1)
+        }
+        else if ticketHeader.status == "Reject"{
+            markerView.backgroundColor = UIColor.red
+        }
+        else if ticketHeader.status == "Review"{
+            markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
+        }
+        else if ticketHeader.status == "Verified"{
+            markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
+        }
+        else {
+            markerView.backgroundColor = UIColor.darkGray
+        }
 //        let ticketTime = decodeTime(timeString: ticketHeader.UIcreationTime!)
-//        timeLabel.text = ticketTime
+        timeLabel.text = ticketHeader.createdOn?.toString()
+        
         vendorRefNoKeyValue.text = "Vendor Ref No :"
-        vendorRefLabel.text = ticketHeader.vendorRefNumber ?? ""
-        extraLabelKey.text = ""
-        extraLabelValue.text = ""
-        vendorNameKey.text = ""
-        vendorNameLabel.text = ""
-        heightConstraint1.constant = 0
-        heightConstraint2.constant = 0
+        if ticketHeader.vendorRefNumber == "" {
+            vendorRefLabel.text = " - "
+        }else{
+            vendorRefLabel.text = ticketHeader.vendorRefNumber
+        }
+        if User.shared.role == UserRole.ServiceProvider{
+            extraLabelKey.text = ""
+            extraLabelValue.text = ""
+            vendorNameKey.text = ""
+            vendorNameLabel.text = ""
+            heightConstraint1.constant = 0
+            heightConstraint2.constant = 0
+
+        }else{
+            extraLabelKey.text = ""
+            extraLabelValue.text = ""
+            vendorNameKey.text = ""
+            vendorNameLabel.text = ""
+        }
         
     }
     
