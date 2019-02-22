@@ -14,16 +14,39 @@ class DFTLocationViewController: UIViewController {
     var wellpads = [Wellpad]()
     var fields = [Field]()
     var facilities = [Facility]()
+    var SelectedIndex :IndexPath? = nil
+    
+    var selectedField : String = ""
+    var selectedFacility : String = ""
+    var selectedWellpad : String = ""
+    var selectedWell : String = ""
+    
     var currentLocationType : String?{
         didSet{
-            switch currentLocationType{
+            switch currentLocationType!{
             case "Fields":
+                fields.removeAll()
+                fields.append(Field(name: "Karnes", facilites: nil))
+                fields.append(Field(name: "North Tilden", facilites: nil))
+                fields.append(Field(name: "South Tilden", facilites: nil))
                 self.tableValues = fields
             case "Facilities":
+                facilities.removeAll()
+                facilities.append(Facility(name: "Tom", wellpads: nil))
+                facilities.append(Facility(name: "Fernandez", wellpads: nil))
+                facilities.append(Facility(name: "Lenhart", wellpads: nil))
                 self.tableValues = facilities
             case "Wellpads":
+                wellpads.removeAll()
+                wellpads.append(Wellpad(name: "Briggs 10H-11H", wells: nil))
+                wellpads.append(Wellpad(name: "Briggs 13H-14H", wells: nil))
+                wellpads.append(Wellpad(name: "Briggs 20H-25H", wells: nil))
                 self.tableValues = wellpads
             case "Wells":
+                wells.removeAll()
+                wells.append(Well(name: "Briggs 10H"))
+                wells.append(Well(name: "Briggs 11H"))
+                wells.append(Well(name: "Briggs 20H"))
                 self.tableValues = wells
             default :
                 print("")
@@ -38,30 +61,52 @@ class DFTLocationViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         // Do any additional setup after loading the view.
-        wells.append(Well(name: "Briggs 10H"))
-        wells.append(Well(name: "Briggs 11H"))
-        wells.append(Well(name: "Briggs 20H"))
-        
-        wellpads.append(Wellpad(name: "Briggs 10H-11H", wells: nil))
-        wellpads.append(Wellpad(name: "Briggs 13H-14H", wells: nil))
-        wellpads.append(Wellpad(name: "Briggs 20H-25H", wells: nil))
-        
-        facilities.append(Facility(name: "Tom", wellpads: nil))
-        facilities.append(Facility(name: "Fernandez", wellpads: nil))
-        facilities.append(Facility(name: "Lenhart", wellpads: nil))
-        
-        fields.append(Field(name: "Karnes", facilites: nil))
-        fields.append(Field(name: "North Tilden", facilites: nil))
-        fields.append(Field(name: "South Tilden", facilites: nil))
-        self.currentLocationType = "Fields" 
-        self.tableView.reloadData()
+
+        if self.currentLocationType == nil{
+            self.currentLocationType = "Fields"
+        }
         self.tableView.allowsSelection = true
         self.tableView.allowsMultipleSelection = true
+        self.tableView.isEditing = true
+        self.title = self.currentLocationType
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(locationSelected))
+
     }
     
-    
+    @objc func locationSelected(){
+        
+        
+        switch currentLocationType!{
+            case "Fields":
+            self.selectedField = self.tableValues![SelectedIndex!.row].name
+            case "Facilities":
+            self.selectedFacility = self.tableValues![SelectedIndex!.row].name
+            case "Wellpads":
+            self.selectedWellpad = self.tableValues![SelectedIndex!.row].name
+            case "Wells":
+            self.selectedWell = self.tableValues![SelectedIndex!.row].name
 
+            default:
+            print("")
+
+            }        
+        self.dataModel?.field = self.selectedField
+        self.dataModel?.facility = self.selectedFacility
+        self.dataModel?.wellPad = self.selectedWellpad
+        self.dataModel?.well = self.selectedWell
+        for controller in self.navigationController!.viewControllers as Array {
+            if controller.isKind(of: DFTCreateNewTicketViewController.self) {
+                self.navigationController!.popToViewController(controller, animated: true)
+                break
+            }
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
 }
+
 extension DFTLocationViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableValues!.count
@@ -69,29 +114,68 @@ extension DFTLocationViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTLocationTableViewCell")
         as! DFTLocationTableViewCell
-        cell.cellLabel.text = tableValues![indexPath.row].name
+        cell.cellButton.titleLabel?.text = tableValues![indexPath.row].name
+        cell.delegate = self
         return cell
+        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let SelectedItem :Location = tableValues![indexPath.row] as! Location
+        
+        if let temp = self.SelectedIndex{
+            if temp == indexPath{
+                self.SelectedIndex = nil
+            }
+            self.tableView.deselectRow(at:temp , animated: true)
+            
+        }
+        self.SelectedIndex = indexPath
+        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        
+       
+        
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+}
+extension DFTLocationViewController : LocationCellDelgate{
+    func didLocationTapped(cell : DFTLocationTableViewCell) {
+        let index = self.tableView.indexPath(for: cell)
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "DFTLocationViewController") as! DFTLocationViewController
         vc.dataModel = self.dataModel
-        switch currentLocationType {
-            
+        switch currentLocationType! {
         case "Fields":
             vc.currentLocationType = "Facilities"
-            
+            self.selectedField = self.tableValues![index!.row].name
         case "Facilities":
             vc.currentLocationType = "Wellpads"
+            self.selectedFacility = self.tableValues![index!.row].name
+
         case "Wellpads":
             vc.currentLocationType = "Wells"
+            self.selectedWellpad = self.tableValues![index!.row].name
+
         case "Wells":
-            self.navigationController?.popViewController(animated: true)
+            self.selectedWell = self.tableValues![index!.row].name
+            self.dataModel?.field = self.selectedField
+            self.dataModel?.facility = self.selectedFacility
+            self.dataModel?.wellPad = self.selectedWellpad
+            self.dataModel?.well = self.selectedWell
+            for controller in self.navigationController!.viewControllers as Array {
+                if controller.isKind(of: DFTCreateNewTicketViewController.self) {
+                    self.navigationController!.popToViewController(controller, animated: true)
+                    break
+                }
+            }
         default:
             print("")
         }
+        vc.dataModel = self.dataModel
+        vc.selectedFacility = self.selectedFacility
+        vc.selectedField = self.selectedField
+        vc.selectedWellpad = self.selectedWellpad
+        vc.selectedWell = self.selectedWell
         self.navigationController?.pushViewController(vc, animated: true)
-        
-        self.title = self.currentLocationType
-
     }
 }

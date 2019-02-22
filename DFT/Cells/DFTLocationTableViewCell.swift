@@ -7,10 +7,17 @@
 //
 
 import UIKit
-
+protocol LocationCellDelgate {
+    func didLocationTapped(cell : DFTLocationTableViewCell)
+}
 class DFTLocationTableViewCell: UITableViewCell {
     
-    @IBOutlet var cellLabel: UILabel!
+    @IBOutlet var cellButton: UIButton!
+    @IBAction func cellButtonTapped(_ sender: Any) {
+        self.delegate?.didLocationTapped(cell: self)
+    }
+    
+    var delegate : LocationCellDelgate?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

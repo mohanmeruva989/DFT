@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SAPOData
 
 class TicketCell: UITableViewCell {
 
@@ -35,7 +36,6 @@ class TicketCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
     
@@ -62,20 +62,20 @@ class TicketCell: UITableViewCell {
         if ticketHeader.status == "Created"{
             markerView.backgroundColor = UIColor(red : 246/255, green : 142/255, blue : 86/255, alpha : 1)
         }
-        else if ticketHeader.status == "Reject"{
+        else if ticketHeader.status == "Ticket Reject"{
             markerView.backgroundColor = UIColor.red
         }
-        else if ticketHeader.status == "Review"{
+        else if ticketHeader.status == "Ticket Review"{
             markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
         }
-        else if ticketHeader.status == "Verified"{
+        else if ticketHeader.status == "Ticket Verified"{
             markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
         }
         else {
             markerView.backgroundColor = UIColor.darkGray
         }
-//        let ticketTime = decodeTime(timeString: ticketHeader.UIcreationTime!)
-        timeLabel.text = ticketHeader.createdOn?.toString()
+        let ticketTime = self.decodeTime(timeString: ticketHeader.createdOn!)
+        timeLabel.text = ticketTime
         
         vendorRefNoKeyValue.text = "Vendor Ref No :"
         if ticketHeader.vendorRefNumber == "" {
@@ -92,10 +92,10 @@ class TicketCell: UITableViewCell {
             heightConstraint2.constant = 0
 
         }else{
-            extraLabelKey.text = ""
-            extraLabelValue.text = ""
-            vendorNameKey.text = ""
-            vendorNameLabel.text = ""
+            extraLabelKey.text = "Vendor ID:"
+            extraLabelValue.text = ticketHeader.vendorName
+            vendorNameKey.text = "VendorName:"
+            vendorNameLabel.text = ticketHeader.vendorAddress
         }
         
     }
@@ -122,20 +122,44 @@ class TicketCell: UITableViewCell {
 //
 //    }
     
+    public func decodeTime(timeString : LocalDateTime) -> String{
+
+        let dateString = timeString.toString()[11..<19]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        dateFormatter.timeZone = TimeZone.init(secondsFromGMT: 0) //Set timezone that you want
+        dateFormatter.locale = NSLocale.current
+        let localTime: Date = dateFormatter.date(from: dateString)!
+        dateFormatter.dateFormat = "hh:mm a"
+        dateFormatter.timeZone = TimeZone.autoupdatingCurrent //Set timezone that you want
+        let somedateString = dateFormatter.string(from: localTime)
+        return somedateString
+    }
+}
+extension String {
+    subscript (bounds: CountableClosedRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start...end])
+    }
     
-//    func decodeTime(timeString : String) -> String{
-//
-//
-//        let hour = timeString[2 ..< 4] // returns String "o, worl"
-//        let minutes = timeString[5 ..< 7]
-//        let seconds = timeString[8 ..< 10]
-//        let timeData = hour + ":" + minutes + ":" + seconds
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "HH:mm:ss"
-//        let myDate = dateFormatter.date(from: timeData)!
-//        dateFormatter.dateFormat = "hh:mm a"
-//        let somedateString = dateFormatter.string(from: myDate)
-//        return somedateString
-//    }
+    subscript (bounds: CountableRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start..<end])
+    }
+    func decodeTime(timeString : String) -> String{
+        let hour = timeString[2 ..< 4] // returns String "o, worl"
+        let minutes = timeString[5 ..< 7]
+        let seconds = timeString[8 ..< 10]
+        let timeData = hour + ":" + minutes + ":" + seconds
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        let myDate = dateFormatter.date(from: timeData)!
+        dateFormatter.dateFormat = "hh:mm a"
+        let somedateString = dateFormatter.string(from: myDate)
+        return somedateString
+    }
+
 }
 

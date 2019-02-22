@@ -31,8 +31,11 @@ class DFTCreateNewTicketViewController: UIViewController {
     var wellpads = [Wellpad]()
     var fields = [Field]()
     var facilities = [Facility]()
+    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
+
     @IBOutlet var galleryView: UICollectionView!
     
+    @IBOutlet var commentsTextView: UITextView!
     @IBAction func addAttachments(_ sender: Any) {
         if convertedImages.count < 3{
         self.attachmentOptions()
@@ -57,8 +60,20 @@ class DFTCreateNewTicketViewController: UIViewController {
     }
     
     @IBAction func onSubmitPress(_ sender: Any) {
-        modalLoadingIndicatorView.show(inView: self.view)
-        self.createDFTPayload()
+        if validateFields(){
+            modalLoadingIndicatorView.show(inView: self.view)
+            self.createAttachments()
+        }
+        else{
+            let alertController = UIAlertController(title: "Alert", message: "Please enter all the mandatory fields", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler:
+            {    _ in
+                self.dismiss(animated: true)
+            } )
+            alertController.addAction(okAction)
+            self.present(alertController, animated:  true)
+        }
+
     }
     
     override func viewDidLoad() {
@@ -72,6 +87,23 @@ class DFTCreateNewTicketViewController: UIViewController {
         self.galleryView.dataSource = self
         self.getLocationInfo()
         // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.reloadData()
+    }
+    func validateFields() -> Bool{
+        if  self.dataModel.vendorRefNumber == nil ||
+            self.dataModel.department == nil ||
+            self.dataModel.reviewerID == nil ||
+            self.dataModel.location == nil ||
+            self.dataModel.startDate == nil ||
+            self.dataModel.endDate == nil{
+            return false
+        }
+        else{
+            return true
+        }
     }
     func getLocationInfo() {
         wells.append(Well(name: "Briggs 10H"))
@@ -92,20 +124,45 @@ class DFTCreateNewTicketViewController: UIViewController {
     }
     
     func createDFTPayload() {
-        
-        
+        self.dataModel.createdOn = LocalDateTime.from(utc: Date())
         self.postDFTayload(payload : self.getJsonBody())
+
+    }
+    func createAttachments()  {
+        var count = 0
+        for image in convertedImages{
+            
+            let attachment = Attachment()
+            let imageData:Data = image.jpegData(compressionQuality: 0.2)!
+            let imageSize = imageData.count
+            let value = ByteCountFormatter.string(fromByteCount: Int64(imageSize), countStyle: .file)
+            print(value)
+            let strBase64:String = imageData.base64EncodedString(options: .lineLength64Characters)
+            attachment.attachmentContent = strBase64
+            attachment.attachmentLength = strBase64.lengthOfBytes(using: .utf8)
+            attachment.attachmentName = User.shared.id! + "_" + String(describing: count) + "_" //+ String(describing: Date()) + ".jpeg"
+            attachment.attachmentType = "image/jpeg"
+            attachment.ServiceProviderId = User.shared.id ?? ""
+            attachments.append(attachment)
+            count += 1
+        }
+        self.modalLoadingIndicatorView.dismiss()
+        self.callDocumentService(documentsArray: self.attachments)
 
     }
     func postDFTayload(payload : JSON)  {
         do{
             var data : Data?
-            let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
             let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.incture.basexsodata/createFieldTicket.xsjs".asURL()
             var urlRequest = try! URLRequest(url: url, method: .post)
             do {
                 data = try JSONSerialization.data(withJSONObject: payload, options: .prettyPrinted)
+                let sd = try JSONSerialization.jsonObject(with: data!, options: []) as! [String:Any]
+                print("****param****")
+                print(sd.printJson())
+                print("****param end****")  
                 print(data)
+                
             } catch let jsonError as NSError {
                 print(jsonError.userInfo)
             }
@@ -143,8 +200,8 @@ class DFTCreateNewTicketViewController: UIViewController {
     private func getJsonBody() -> JSON {
         let header : JSON = [
             "dftNumber": "",
-            "poNumber": 0,
-            "vendorAdminId": "",
+            "poNumber": "",
+            "vendorAdminId": "P000064",
             "vendorId": "300879",
             "vendorName": "Z-Chemicals Pvt Ltd",
             "vendorAddress": "PO 452,Texas",
@@ -152,12 +209,12 @@ class DFTCreateNewTicketViewController: UIViewController {
             "serviceProviderMail": User.shared.emailId ?? "",
             "serviceProviderId": User.shared.id ?? "",
             "serviceProviderName": User.shared.fullName ?? "",
-            "ReviewerId": self.dataModel.reviewerID ?? "", //TBD
-            "ReviewerName": "123",//TBD
-            "ReviewerEmail": "123",//TBD
+            "ReviewerId": self.dataModel.reviewerID ?? "",
+            "ReviewerName": self.dataModel.reviewerName ?? "",
+            "ReviewerEmail": self.dataModel.reviewerEmail ?? "",
             "sesApproverName": "",
             "sesApproverEmail": "",
-            "department": self.dataModel.department ?? "",//TBD
+            "department": self.dataModel.department ?? "",
             "location": self.dataModel.location ?? "",//TBD
             "accountingCategory": "",
             "costCenter": "",
@@ -165,50 +222,57 @@ class DFTCreateNewTicketViewController: UIViewController {
             "workOrderNo": "",
             "signatureVersion": 0,
             "wbsElement": 0,
-            "deviceType": "iOS",//TBD
-            "deviceId": "123",//TBD
-            "status": "Created",//TBD
-            "createdBy": User.shared.fullName ?? "",//TBD
+            "deviceType": "iOS",
+            "deviceId": UIDevice.current.identifierForVendor?.description ?? "",
+            "status": "Ticket Created",
+            "createdBy": User.shared.id ?? "",
             "updatedBy": "",
-            "vendorRefNumber": self.dataModel.vendorRefNumber ?? "",//TBD
-            "createdOn":"2018-10-10T17:09:22.002Z",//TBD
+            "vendorRefNumber": self.dataModel.vendorRefNumber ?? "",
+            "createdOn": self.dataModel.createdOn?.toString() ?? "",
             "reviewedBy": "",
             "completedBy": "",
-            "updatedOn":"2018-10-10T17:09:22.002Z",//TBD
-            "reviewedOn":"2018-10-10T17:09:22.002Z",
-            "completedOn":"2018-10-10T17:09:22.002Z",//TBD
-            "well": "123",//TBD
-            "field": "123",//TBD
-            "facility": "123",//TBD
-            "wellPad": "123",//TBD
-            "ownerId": self.dataModel.reviewerID ?? "",//TBD
-            "startDate":"2018-10-10",//TBD
-            "startTime":"10:10:10",//TBD
-            "endDate":"2019-10-10",//TBD
-            "endTime":"10:10:10"//TBD
+            "updatedOn":self.dataModel.createdOn?.toString() ?? "",
+            "reviewedOn":"",
+            "completedOn":"",
+            "well": self.dataModel.well  ?? "",
+            "field": self.dataModel.field ?? "",
+            "facility": self.dataModel.facility ?? "",
+            "wellPad": self.dataModel.wellPad ?? "",
+            "ownerId": self.dataModel.reviewerID ?? "",
+            "startDate":self.dataModel.startDate?.toString() ?? "",
+            "startTime":self.dataModel.startTime?.toString() ?? "",
+            "endDate":self.dataModel.endDate?.toString() ?? "",
+            "endTime":self.dataModel.endTime?.toString() ?? ""
         ]
+        var attachmentsPayload : [JSON] = []
+        for each in self.attachments{
+            let attach : JSON = [
+        
+            "attachmentId": each.attachmentID,
+            "dftNumber": "",
+            "attachmentName": each.attachmentName,
+            "dftAttachmentType": each.attachmentType,
+            "createdByName": "",
+            "createdOn": "2018-10-10T17:09:22.002Z",
+            "updatedByName": "",
+            "updatedOn": "2018-10-10T17:09:22.002Z",
+            "attachmentUrl": each.attachmentUrl ?? ""
+            ]
+            attachmentsPayload.append(attach)
+            
+        }
         
         let body : [String : Any] =
                 [
                 "header": header,
                 "comments": [[
-                "commentId": "",
+                "commentId": self.commentsTextView.text ?? "",
                 "dftNumber": "",
-                "commentedByName": "surya",
-                "commentedOn": "2018-10-10T17:09:22.002Z",
-                "comment": "test"
+                "commentedByName": User.shared.fullName ?? "",
+                "commentedOn": self.dataModel.createdOn?.toString() ?? "",
+                "comment": self.commentsTextView.text ?? ""
                 ]],
-                "attachments": [[
-                "attachmentId": "",
-                "dftNumber": "",
-                "attachmentName": "",
-                "dftAttachmentType": "",
-                "createdByName": "",
-                "createdOn": "2018-10-10T17:09:22.002Z",
-                "updatedByName": "",
-                "updatedOn": "2018-10-10T17:09:22.002Z",
-                "attachmentUrl": "www.google.com"
-                ]],
+                "attachments": attachmentsPayload,
                 "changeLog": [[
                 "activityId": "",
                 "dftNumber": "",
@@ -217,7 +281,7 @@ class DFTCreateNewTicketViewController: UIViewController {
                 "createdOn": "2018-10-10T17:09:22.002Z",
                 "createdByName": ""
                 ]]
-                        ]
+            ]
 
         return body
     }
@@ -231,22 +295,19 @@ extension DFTCreateNewTicketViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellData : CellModel = (self.viewModel?.tableViewModel?[indexPath.row])!
         let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
-        let pickerView = UIPickerView()
+        toolBar.backgroundColor = UIColor(hexString: "445E75")
         switch cellData.dequeCell {
         case "DFTCreateTableViewCell":
             let  cell = tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell")! as! DFTCreateTableViewCell
+            cell.dataModel = self.dataModel
             cell.setData(cellData)
             cell.cellTextField.inputAccessoryView = toolBar
             cell.delegate = self
-            cell.dataModel = self.dataModel
           return cell
         case "DFTDateTimeTableViewCell" :
             let cell = tableView.dequeueReusableCell(withIdentifier: "DFTDateTimeTableViewCell")! as! DFTDateTimeTableViewCell
+            cell.dataModel = self.dataModel
             cell.setData(cellData)
-            cell.textField2.inputAccessoryView = toolBar
-            cell.textField1.inputAccessoryView = toolBar
-//            cell.textField1.delegate = self
-//            cell.textField2.delegate = self
            return cell
         default:
             print("Invalid deque cell")
@@ -325,7 +386,6 @@ extension DFTCreateNewTicketViewController : DFTTableViewCellDelegate{
 }
     func openLocation() {
         let locationVC = self.storyboard?.instantiateViewController(withIdentifier: "DFTLocationViewController") as! DFTLocationViewController
-        locationVC.currentLocationType = "Fields"
         locationVC.dataModel = self.dataModel
         self.navigationController?.pushViewController(locationVC, animated: true)
     }
@@ -549,17 +609,21 @@ extension DFTCreateNewTicketViewController{
         for document in documentsArray{
             let documentInfo : [String : Any] =
                 [
-                    "folderName": "DFT",
-                    "fileType" : document.attachmentType ,
+                    "folderName": "DummyFolder",
+                    "fileType" : "image/jpeg" ,
                     "fileName" : document.attachmentName ,
                     "fileContent" : document.attachmentContent,
-                    "country": "US",
-                    "region": "HOUSTON",
-                    "project": "DFT",
-                    "module": "DFT",
-                    "createdBy": document.createdBy,
-                    "createdOn": document.createdOn,
-                    "appId": "DFT",
+                    "country": "",
+                    "region": "",
+                    "project": "",
+                    "module": "",
+                    "createdBy": "",
+                    "createdOn": "",
+                    "program": "",
+                    "appId": "",
+                    "transactionNumber": "",
+                    "docCreationDate": "",
+                    "docCreatedBy": ""
                     
                     ]
             
@@ -568,7 +632,67 @@ extension DFTCreateNewTicketViewController{
         
         
         payload ["documentDetailDtoList"] =  documentInfoList
-//
+        
+        do{
+            var data : Data?
+            let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.incture.documentService/upload".asURL()
+            self.modalLoadingIndicatorView.show(inView: self.view)
+            var urlRequest = try! URLRequest(url: url, method: .put)
+            do {
+                data = try JSONSerialization.data(withJSONObject: payload, options: [])
+                let sd = try JSONSerialization.jsonObject(with: data!, options: []) as! [String:Any]
+                print("****param****")
+//                print(sd.printJson())
+                print("****param end****")            } catch let jsonError as NSError {
+                print(jsonError.userInfo)
+            }
+            
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = data!
+            let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+                DispatchQueue.main.async {
+                    self.modalLoadingIndicatorView.dismiss()
+                }
+                
+                do {
+                    let json : [[String : Any]] = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String : Any]]
+//                    print(json)
+                    
+                    var i = 0
+                    for each in json{
+                    if let documentDetailDto = each["documentDetailDto"] as? [String : Any]{
+                    for each in self.attachments{
+                        if each.attachmentName == documentDetailDto["fileName"] as! String{
+                            each.documentId = documentDetailDto["documentId"] as? String
+                            each.attachmentUrl = "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + (documentDetailDto["documentId"] as! String)
+                                                    }
+                            }
+                        self.attachments[i].attachmentUrl = "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + (documentDetailDto["documentId"] as! String)
+                        print(self.attachments[i].attachmentUrl)
+                        self.attachments[i].documentId = documentDetailDto["documentId"] as? String
+                    i = i+1
+                }
+            }
+            self.createDFTPayload()
+                } catch let jsonError as NSError {
+                    print(jsonError.userInfo)
+                }
+                
+                guard let _ = data, error == nil else {
+                    print("Error in PostinG create payload")
+                    return }
+                do {
+                    print(response)
+                } catch let error as NSError {
+                    print(error)
+                }
+            }
+            dataTask.resume()
+        }
+        catch{
+            
+        }
+
 //        Alamofire.request("\(BaseUrl.apiURL)/DftDocumentService/upload", method: .put, parameters: payload, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
 //            if response.result.isSuccess, let jsonArray = response.result.value as? [[String : Any]] {
 //                self.modalLoadingIndicatorView.dismiss()
@@ -595,40 +719,14 @@ extension DFTCreateNewTicketViewController{
 //            }
         }
     }
-//    func getAttachments()
-//    {
-//
-//        // self.convertToUIImage()
-//        self.attachments.removeAll()
-//
-//        if convertedImages.count == 0{
-//
-//            let alertController = UIAlertController.init(title: "", message:"Please add minimum of 1 Attachment." , preferredStyle: UIAlertController.Style.alert)
-//            let okAction = UIAlertAction.init(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
-//            alertController.addAction(okAction)
-//            self.present(alertController, animated: true, completion: nil)
-//        }
-//        else{
-//            var count = 0
-//            for image in convertedImages{
-//
-//                let attachment = Attachment()
-//                let imageData:NSData = UIImageJPEGRepresentation(image, 0.2)! as NSData
-//                let imageSize = imageData.length
-//                let value = ByteCountFormatter.string(fromByteCount: Int64(imageSize), countStyle: .file)
-//                print(value)
-//                let strBase64:String = imageData.base64EncodedString(options: .lineLength64Characters)
-//                attachment.attachmentContent = strBase64
-//                attachment.attachmentLength = strBase64.lengthOfBytes(using: .utf8)
-//                attachment.attachmentName = UserDefaults.standard.string(forKey: "id")! + "_" + String(describing: count) + "_" + String(describing: Date()) + ".jpeg"
-//                attachment.attachmentType = "image/jpeg"
-//                attachment.ServiceProviderId = UserDefaults.standard.string(forKey: "id")!
-//                attachments.append(attachment)
-//                count += 1
-//            }
-//                callDocumentService(documentsArray : attachments)
-//
-//
-//        }
-//    }
-//}
+
+extension Dictionary {
+    func printJson() -> String {
+        var returnValue = ""
+        do {
+            let jsonData = try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            returnValue = String(bytes: jsonData!, encoding: String.Encoding.utf8) ?? "Cannot parse the json"
+        }
+        return returnValue
+    }
+}

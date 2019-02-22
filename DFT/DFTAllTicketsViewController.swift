@@ -50,6 +50,10 @@ class DFTAllTicketsViewController: UIViewController {
     @IBAction func addNewTicketButtonTapped(_ sender: Any) {
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.refresh()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.requestEntities(completionHandler: {_ in self.tableView.reloadData()})
@@ -62,6 +66,8 @@ class DFTAllTicketsViewController: UIViewController {
         self.title = "My DFT's"
         self.refreshControl.addTarget(self, action: #selector(self.refresh), for: UIControl.Event.valueChanged)
         self.tableView.addSubview(self.refreshControl)
+        addNewTicketButton.layer.cornerRadius = addNewTicketButton.frame.width/2
+        addNewTicketButton.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
     
@@ -79,15 +85,18 @@ class DFTAllTicketsViewController: UIViewController {
         }
     }
     @objc func refresh() {
+        self.modalLoadingIndicatorView.show(inView: self.view)
         let oq = OperationQueue()
         oq.addOperation({
             self.requestEntities(completionHandler: {_ in
                 OperationQueue.main.addOperation({
+                    self.modalLoadingIndicatorView.dismiss()
                     self.refreshControl.endRefreshing()
                     self.tableView.reloadData()})
                 })
         })
     }
+
 
 
 }

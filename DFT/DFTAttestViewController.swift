@@ -11,7 +11,7 @@ import SAPFiori
 
 class DFTAttestViewController: UIViewController {
     
-    var cellLabels : [String] = ["Cost Object" , "PO" , "WO", "WBS" , "Accounting Category", "SES Approver" ]
+    var cellLabels : [String] = ["PO" , "WO", "WBS" , "Accounting Category", "SES Approver" ]
     var ticket : DFTHeaderType?
     var modalLoadingIndicatorView = FUIModalLoadingIndicatorView()
     @IBOutlet var tableView: UITableView!
@@ -36,6 +36,8 @@ class DFTAttestViewController: UIViewController {
     func getJsonBody() -> JSON{
     
         let header : JSON = [
+            "role" : "1",
+            "action" : "Review",
             "dftNumber": String(self.ticket!.dftNumber!),
             "poNumber": self.ticket?.poNumber ?? "",
             "vendorAdminId": self.ticket?.vendorAdminID ?? "",
@@ -61,7 +63,7 @@ class DFTAttestViewController: UIViewController {
             "wbsElement": self.ticket?.wbsElement ?? "",
             "deviceType": "iOS",//TBD
             "deviceId": "123",//TBD
-            "status": self.ticket?.status ?? "",//TBD
+            "status": "Ticket Verified",//TBD
             "createdBy": self.ticket?.createdBy ?? "" ,//TBD
             "updatedBy": User.shared.fullName ?? "",
             "vendorRefNumber": self.ticket?.vendorRefNumber ?? "",//TBD
@@ -69,40 +71,24 @@ class DFTAttestViewController: UIViewController {
             "reviewedBy": User.shared.id ?? "",
             "completedBy": self.ticket?.completedBy ?? "",
             "updatedOn":"2018-10-10T17:09:22.002Z",//TBD
-            "reviewedOn":"2018-10-10T17:09:22.002Z",
+            "reviewedOn":"",
             "completedOn":"2018-10-10T17:09:22.002Z",//TBD
             "well": self.ticket?.well ?? "",//TBD
             "field": self.ticket?.field ?? "",//TBD
             "facility": self.ticket?.facility ?? "",//TBD
             "wellPad": self.ticket?.wellPad ?? "",//TBD
-            "ownerId": self.ticket?.ownerID ?? "",//TBD
-            "startDate":"2018-10-10",//TBD
-            "startTime":"10:10:10",//TBD
-            "endDate":"2019-10-10",//TBD
-            "endTime":"10:10:10"//TBD
+            "ownerId": "P000064",//TBD
+            "startDate":self.ticket?.startDate?.toString() ?? "",//TBD
+            "startTime":self.ticket?.startTime?.toString() ?? "",//TBD
+            "endDate": self.ticket?.endDate?.toString() ?? "",//TBD
+            "endTime": self.ticket?.endTime?.toString() ?? ""//TBD
         ]
         
         let body : [String : Any] =
             [
                 "header": header,
-                "comments": [[
-                    "commentId": "",
-                    "dftNumber": "",
-                    "commentedByName": "surya",
-                    "commentedOn": "2018-10-10T17:09:22.002Z",
-                    "comment": "test"
-                    ]],
-                "attachments": [[
-                    "attachmentId": "",
-                    "dftNumber": "",
-                    "attachmentName": "",
-                    "dftAttachmentType": "",
-                    "createdByName": "",
-                    "createdOn": "2018-10-10T17:09:22.002Z",
-                    "updatedByName": "",
-                    "updatedOn": "2018-10-10T17:09:22.002Z",
-                    "attachmentUrl": "www.google.com"
-                    ]],
+                "comments": self.ticket?.comments,
+                "attachments": self.ticket?.attachments,
                 "changeLog": [[
                     "activityId": "",
                     "dftNumber": "",
@@ -123,6 +109,10 @@ class DFTAttestViewController: UIViewController {
         do {
             data = try JSONSerialization.data(withJSONObject: self.getJsonBody(), options: .prettyPrinted)
             print(data)
+            let sd = try JSONSerialization.jsonObject(with: data!, options: []) as! [String:Any]
+            print("****param****")
+            print(sd.printJson())
+            print("****param end****") 
         } catch let jsonError as NSError {
             print(jsonError.userInfo)
         }
@@ -131,6 +121,7 @@ class DFTAttestViewController: UIViewController {
         let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             DispatchQueue.main.async {
                 self.modalLoadingIndicatorView.dismiss()
+                self.navigationController?.popToRootViewController(animated: true)
             }
             
             do {
@@ -154,15 +145,15 @@ class DFTAttestViewController: UIViewController {
 
     }
     func rejectTicket(){
-        
-    }
-    func updateTicket() {
         self.ticket?.poNumber = ""
         self.ticket?.workOrderNo = ""
         self.ticket?.accountingCategory = ""
         self.ticket?.wbsElement = ""
         self.ticket?.costCenter = ""
         self.ticket?.sesNumber = ""        
+    }
+    func updateTicket() {
+
         self.verifyTicket()
     }
 }
@@ -176,6 +167,8 @@ extension DFTAttestViewController : UITableViewDataSource{
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as! DFTCreateTableViewCell
         cell.cellLabel.text = currentCellLabel
         cell.cellTextField.placeholder = "--Select--"
+        cell.cellTextField.tag = indexPath.row
+        cell.cellTextField.delegate = self
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -186,4 +179,23 @@ extension DFTAttestViewController : UITableViewDataSource{
 }
 extension DFTAttestViewController : UITableViewDelegate{
     
+}
+extension DFTAttestViewController : UITextFieldDelegate{
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField.tag {
+
+        case 0 :
+            self.ticket?.poNumber = textField.text
+        case 1:
+            self.ticket?.workOrderNo = textField.text
+        case 2:
+            self.ticket?.wbsElement = textField.text
+        case 3:
+            self.ticket?.accountingCategory = textField.text
+        case 4:
+            self.ticket?.sesNumber = textField.text
+        default:
+            print("")
+        }
+    }
 }

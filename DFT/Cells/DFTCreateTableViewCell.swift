@@ -42,7 +42,7 @@ class DFTCreateTableViewCell: UITableViewCell {
             self.cellTextField?.text = self.dataModel?.vendorRefNumber ?? ""
         case "Department":
             let pickerView = UIPickerView()
-            self.departments = ["Operations", "Capital Projects" , "Maintainence"]
+            self.departments = ["", "Operations", "Capital Projects" , "Maintainence"]
             self.cellTextField?.text = self.dataModel?.department ?? ""
             self.cellTextField.inputView = pickerView
             pickerView.dataSource = self
@@ -51,17 +51,54 @@ class DFTCreateTableViewCell: UITableViewCell {
             self.cellTextField.inputAccessoryView = toolBar
         case "Reviewer":
             let pickerView = UIPickerView()
-            
+            if self.reviewers.count == 0 {
+            self.reviewers.append(Reviewer(name: "", emailId: "", pId: ""))
             self.reviewers.append(Reviewer(name: "DFT Reviewer", emailId: "dftrev@gmail.com", pId: "P000066"))
             self.reviewers.append(Reviewer(name: "Sammy Daniels", emailId: "sam.daniels@gmail.com", pId: "P99887"))
-            self.reviewers.append(Reviewer(name: "John Ricthie", emailId: "ohn.ritchie@gmail.com", pId: "P679967"))
+            self.reviewers.append(Reviewer(name: "John Ricthie", emailId: "john.ritchie@gmail.com", pId: "P679967"))
             self.reviewers.append(Reviewer(name: "George Pool", emailId: "george.pool@gmail.com", pId: "P12342"))
+            }
             self.cellTextField?.text = self.dataModel?.reviewerEmail ?? ""
             self.cellTextField.inputAccessoryView = toolBar
             self.cellTextField.inputView = pickerView
             pickerView.dataSource = self
             pickerView.delegate = self
             pickerView.tag = 1
+        case "Location" :
+            print("")
+            var location : String = ""
+            
+            if self.dataModel!.field == "" || self.dataModel!.field == nil{
+                self.cellTextField.text = location
+                self.dataModel?.location = location
+                break
+            }
+            location = self.dataModel!.field!
+            
+            if  ""  == self.dataModel!.facility || self.dataModel!.field == nil{
+                self.cellTextField.text = location
+                self.dataModel?.location = location
+                break
+            }
+            location = location + "/" + self.dataModel!.facility!
+
+            if ""  == self.dataModel!.wellPad || self.dataModel!.field == nil {
+                self.cellTextField.text = location
+                self.dataModel?.location = location
+                break
+            }
+            location = location + "/" + self.dataModel!.wellPad!
+
+            if ""  == self.dataModel!.well  || self.dataModel!.field == nil{
+                self.cellTextField.text = location
+                self.dataModel?.location = location
+                break
+            }
+            location = location + "/" + self.dataModel!.well!
+            self.dataModel?.location = location
+            self.cellTextField.text = location
+            return
+
         default:
             print("")
         }
@@ -79,8 +116,6 @@ extension DFTCreateTableViewCell : UITextFieldDelegate{
             self.dataModel?.vendorRefNumber = textField.text
         case "Department":
             self.dataModel?.department = textField.text
-        case "Reviewer":
-            self.dataModel?.reviewerID = textField.text
         default:
             print("")
         }
@@ -90,7 +125,12 @@ extension DFTCreateTableViewCell : UITextFieldDelegate{
         self.cellTextField.text = textField.text
         switch self.cellModel?.identifier {
         case "Location":
+            self.cellTextField.endEditing(true)
             self.delegate?.openLocation()
+        case "Department":
+            if let inpView = self.inputView as? UIPickerView{
+                inpView.selectRow(1, inComponent: 1, animated: true)
+            }
         default:
             print("")
         }
@@ -125,8 +165,9 @@ extension DFTCreateTableViewCell : UIPickerViewDelegate{
         }
         else{
             self.dataModel?.reviewerEmail = self.reviewers[row].emailId
+            self.dataModel?.reviewerID = self.reviewers[row].pId
+            self.dataModel?.reviewerName = self.reviewers[row].name
             self.cellTextField.text = self.dataModel?.reviewerEmail
         }
     }
-
 }

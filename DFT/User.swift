@@ -17,8 +17,10 @@ class User {
     var role : UserRole?
     init() {}
     func setUserDetails(json : JSON) {
-        self.fullName = json[""] as? String
-        let temp = json["emailid"] as? [JSON]
+        let names = json["name"] as! JSON
+        self.fullName = (names["givenName"] as! String) + " " + (names["familyName"] as! String)
+        
+        let temp = json["emails"] as? [JSON]
         self.emailId = temp?[0]["value"] as? String
         self.id = json["id"] as? String
         let roles = json["groups"] as? [JSON]

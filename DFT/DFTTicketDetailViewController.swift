@@ -7,28 +7,37 @@
 //
 
 import UIKit
-
+import AlamofireImage
+import Alamofire
 class DFTTicketDetailViewController: UIViewController {
     var ticket : DFTHeaderType?
     var cellLabels : [String] = ["Vendor Reference No" , "Department", "Location", "Job Performed By" ,"Start Data", "End Date", "Create Date" ]
     let dateFormatter = DateFormatter()
+    var ticketAttachments : [JSON]?
+    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
+
+    @IBOutlet var attachmentView: UIView!
     @IBOutlet var nextButton: UIButton!
     @IBOutlet var vendorNameLabel: UILabel!
     @IBOutlet var vendorIdLabel: UILabel!
     @IBOutlet var vendorAddress: UILabel!
     @IBAction func segmentToggled(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 1{
-            self.cellLabels = ["Comments", "Attachements"]
             self.nextButton.isHidden = false
+            self.attachmentView.isHidden = false
             
         }else{
             self.cellLabels = ["Vendor Reference No" , "Department", "Location", "Job Performed By" ,"Start Data", "End Date", "Create Date" ]
              self.nextButton.isHidden = true
+            self.attachmentView.isHidden = true
+
 
             }
         self.tableView.reloadData()
         
     }
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var commentsView: UITextView!
     @IBOutlet var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +49,15 @@ class DFTTicketDetailViewController: UIViewController {
         self.vendorIdLabel.text = self.ticket?.vendorID
         self.vendorAddress.text = self.ticket?.vendorAddress
         self.nextButton.isHidden = true
+        self.attachmentView.isHidden = true
         dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-
+        if self.ticket?.comments.count != 0 {
+        self.commentsView.text = self.ticket?.comments[0].comment
+        }
         
+        self.commentsView.isUserInteractionEnabled = false
+        self.collectionView.dataSource = self
+        self.getAttachments()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        let dest = segue.destination as! DFTAttestViewController
@@ -58,17 +73,18 @@ extension DFTTicketDetailViewController : UITableViewDataSource{
         let cellLabel = cellLabels[indexPath.row]
         let dateTimeCell = self.tableView.dequeueReusableCell(withIdentifier: "DFTDateTimeTableViewCell") as! DFTDateTimeTableViewCell
         let textFieldCell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as! DFTCreateTableViewCell
-        let commentsCell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCommentsTableViewCell") as! DFTCommentsTableViewCell
         dateTimeCell.textField2.isUserInteractionEnabled = false
         dateTimeCell.textField1.isUserInteractionEnabled = false
         textFieldCell.cellTextField.isUserInteractionEnabled = false
-        if cellLabel == "Comments"{
+        if cellLabel == "Comments" || cellLabel == "Attachments"{
+            
             let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCommentsTableViewCell") as! DFTCommentsTableViewCell
             if self.ticket?.comments.count != 0{
                 cell.commentsTextView.text = self.ticket?.comments[0].comment
             }
             return cell
         }
+
         switch indexPath.row {
         case 0 :
             textFieldCell.cellLabel.text = cellLabel
@@ -89,21 +105,33 @@ extension DFTTicketDetailViewController : UITableViewDataSource{
 
         case 4 :
             dateTimeCell.label1.text = "Start Date"
-            dateTimeCell.textField1.text = self.ticket?.startDate?.toString()
+            guard let startDate : String = self.ticket?.startDate?.toString() else{
+                textFieldCell.cellTextField.text = " - "
+                return textFieldCell
+            }
+            dateTimeCell.textField1.text = convertTimeStamp(dateTimeString: startDate)
             dateTimeCell.label2.text = "Start Time"
             dateTimeCell.textField2.text = self.ticket?.startTime?.toString()
             return dateTimeCell
         case 5 :
             dateTimeCell.label1.text = "End Date"
             dateTimeCell.label2.text = "End Time"
-            dateTimeCell.textField1.text = self.ticket?.endDate?.toString()
+            guard let endDate : String = self.ticket?.endDate?.toString() else{
+                textFieldCell.cellTextField.text = " - "
+                return textFieldCell
+            }
+            dateTimeCell.textField1.text = convertTimeStamp(dateTimeString: endDate)
             dateTimeCell.textField2.text = self.ticket?.endTime?.toString()
 
             return dateTimeCell
 
         case 6 :
             textFieldCell.cellLabel.text = cellLabel
-            textFieldCell.cellTextField.text = self.ticket?.createdOn?.toString()
+            guard let createdOn : String = self.ticket?.createdOn?.toString() else{
+                textFieldCell.cellTextField.text = " - "
+                return textFieldCell
+            }
+            textFieldCell.cellTextField.text = convertTimeStamp(dateTimeString: createdOn)
             return textFieldCell
         default:
             print("Out of Index")
@@ -130,3 +158,77 @@ extension DFTTicketDetailViewController : UITableViewDelegate{
     }
 }
 
+extension DFTTicketDetailViewController :UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.ticketAttachments?.count ?? 0
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "DFTGalleryCollectionViewCell", for: indexPath) as! DFTGalleryCollectionViewCell
+        do {
+            let id = URL(string: self.ticketAttachments![indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
+            let absUrl = URL(string: "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + id!)
+            try  cell.galleryImage.af_setImage(withURL: absUrl!)
+        }
+        catch{
+            
+        }
+        return cell
+    }
+    func getAttachments() {
+        
+        do{
+            let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/getFieldTicketDetails.xsodata/DFTHeader(\(self.ticket!.dftNumber!))?$expand=Comments,ChangeLogs,Attachments&$format=json".asURL()
+            var urlRequest = try! URLRequest(url: url, method: .get)
+            
+            let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+                DispatchQueue.main.async {
+                }
+                
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as! JSON
+                    guard let d = json["d"] as? JSON else{
+                        return
+                    }
+                    guard let attachments = d["Attachments"] as? JSON else{
+                        return
+                    }
+                    guard let results = attachments["results"] as? [JSON] else{
+                        return
+                    }
+                    self.ticketAttachments = results
+                    self.collectionView.reloadData()
+                    print(json)
+                } catch let jsonError as NSError {
+                    print(jsonError.userInfo)
+                }
+                
+                guard let _ = data, error == nil else {
+                    print("Error in PostinG create payload")
+                    return }
+                do {
+                    print(response)
+                } catch let error as NSError {
+                    print(error)
+                }
+            }
+            dataTask.resume()
+        }
+    }
+    
+
+}
+public func convertTimeStamp(dateTimeString : String) -> String
+{
+    let dateString = dateTimeString[0..<10]
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    guard let dateStamp = dateFormatter.date(from: dateString) else {
+        return " - "
+    }
+    print("createdDate \(dateStamp)")
+    dateFormatter.timeZone = TimeZone(abbreviation: "IST") //Set timezone that you want
+    dateFormatter.locale = NSLocale.current
+    dateFormatter.dateFormat = "dd MMM yyyy" //Specify your format that you want
+    let strDate = dateFormatter.string(from: dateStamp)
+    return strDate
+}

@@ -119,7 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             //Setting Custom ViewController
 //            (masterViewController as! DFTHeaderTypeMasterViewController).entitySetName = "DFTHeader"
             let allTicketsViewController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DFTAllTicketsViewController") as! DFTAllTicketsViewController
-            let MainNavigationController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
 
             func fetchDFTHeader(_ completionHandler: @escaping ([DFTHeaderType]?, Error?) -> Void) {
                 // Only request the first 20 values. If you want to modify the requested entities, you can do it here.
@@ -143,9 +142,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     }
                 }
             }
-            
             allTicketsViewController.loadEntitiesBlock = fetchDFTHeader
-            MainNavigationController.pushViewController(allTicketsViewController, animated: false)
+//            let navigationController = UINavigationController(rootViewController: allTicketsViewController)
+            let MainNavigationController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController
+            MainNavigationController.viewControllers = [allTicketsViewController]
+            
             self.window!.rootViewController = MainNavigationController
             
 
