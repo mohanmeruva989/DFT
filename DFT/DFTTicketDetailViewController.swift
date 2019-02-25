@@ -14,6 +14,15 @@ class DFTTicketDetailViewController: UIViewController {
     var cellLabels : [String] = ["Vendor Reference No" , "Department", "Location", "Job Performed By" ,"Start Data", "End Date", "Create Date" ]
     let dateFormatter = DateFormatter()
     var ticketAttachments : [JSON]?
+    var ticketComments : [JSON]?{
+        didSet{
+            DispatchQueue.main.async {
+                if self.ticketComments != nil {
+                self.commentsView.text = (self.ticketComments!.last!)["comment"] as? String
+                }
+            }
+        }
+    }
     let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
 
     @IBOutlet var attachmentView: UIView!
@@ -36,13 +45,20 @@ class DFTTicketDetailViewController: UIViewController {
         self.tableView.reloadData()
         
     }
-    @IBOutlet var collectionView: UICollectionView!
+
+    @IBOutlet var tableView2: UITableView!
     @IBOutlet var commentsView: UITextView!
     @IBOutlet var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView2.dataSource = self
+        self.tableView2.delegate = self
+        self.tableView2.tag = 2
+        self.tableView2.tableFooterView = UIView()
+
+
         self.tableView.tableFooterView = UIView()
         // Do any additional setup after loading the view.
         self.vendorNameLabel.text = self.ticket?.vendorName
@@ -56,7 +72,6 @@ class DFTTicketDetailViewController: UIViewController {
         }
         
         self.commentsView.isUserInteractionEnabled = false
-        self.collectionView.dataSource = self
         self.getAttachments()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,9 +82,23 @@ class DFTTicketDetailViewController: UIViewController {
 }
 extension DFTTicketDetailViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView.tag == 2{
+            return self.ticketAttachments?.count ?? 0
+        }
+        
         return cellLabels.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView.tag == 2{
+            let cell = self.tableView2.dequeueReusableCell(withIdentifier: "DFTGalleryTableViewCell") as! DFTGalleryTableViewCell
+            let id = URL(string: self.ticketAttachments![indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
+            let absUrl = URL(string: "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + id!)
+            cell.galleryImage.af_setImage(withURL: absUrl!, placeholderImage: UIImage(named: "Imageplaceholder"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: .curlDown(1), runImageTransitionIfCached: false, completion: nil)
+            cell.label.text  =  self.ticketAttachments![indexPath.row]["attachmentName"] as? String
+                return cell
+        }
+        
+        
         let cellLabel = cellLabels[indexPath.row]
         let dateTimeCell = self.tableView.dequeueReusableCell(withIdentifier: "DFTDateTimeTableViewCell") as! DFTDateTimeTableViewCell
         let textFieldCell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as! DFTCreateTableViewCell
@@ -138,11 +167,14 @@ extension DFTTicketDetailViewController : UITableViewDataSource{
             return textFieldCell
         }
     }
-
+    
     
 }
 extension DFTTicketDetailViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView.tag == 2{
+            return 90
+        }
         let cellLabel = self.cellLabels[indexPath.row]
         if cellLabel == "Comments"{
             return 120
@@ -158,27 +190,27 @@ extension DFTTicketDetailViewController : UITableViewDelegate{
     }
 }
 
-extension DFTTicketDetailViewController :UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.ticketAttachments?.count ?? 0
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "DFTGalleryCollectionViewCell", for: indexPath) as! DFTGalleryCollectionViewCell
-        do {
-            let id = URL(string: self.ticketAttachments![indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
-            let absUrl = URL(string: "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + id!)
-            try  cell.galleryImage.af_setImage(withURL: absUrl!)
-        }
-        catch{
-            
-        }
-        return cell
-    }
+extension DFTTicketDetailViewController {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return self.ticketAttachments?.count ?? 0
+//    }
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "DFTGalleryCollectionViewCell", for: indexPath) as! DFTGalleryCollectionViewCell
+//        do {
+//            let id = URL(string: self.ticketAttachments![indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
+//            let absUrl = URL(string: "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + id!)
+//            try  cell.galleryImage.af_setImage(withURL: absUrl!)
+//        }
+//        catch{
+//
+//        }
+//        return cell
+//    }
     func getAttachments() {
         
         do{
             let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/getFieldTicketDetails.xsodata/DFTHeader(\(self.ticket!.dftNumber!))?$expand=Comments,ChangeLogs,Attachments&$format=json".asURL()
-            var urlRequest = try! URLRequest(url: url, method: .get)
+            let urlRequest = try! URLRequest(url: url, method: .get)
             
             let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
                 DispatchQueue.main.async {
@@ -195,8 +227,15 @@ extension DFTTicketDetailViewController :UICollectionViewDataSource{
                     guard let results = attachments["results"] as? [JSON] else{
                         return
                     }
+                    guard let comm = d["Comments"] as? JSON else{
+                        return
+                    }
+                    guard let comm2 = comm["results"] as? [JSON] else{
+                        return
+                    }
                     self.ticketAttachments = results
-                    self.collectionView.reloadData()
+                    self.ticketComments = comm2
+                    self.tableView2.reloadData()
                     print(json)
                 } catch let jsonError as NSError {
                     print(jsonError.userInfo)

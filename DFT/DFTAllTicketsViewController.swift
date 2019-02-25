@@ -14,6 +14,7 @@ class DFTAllTicketsViewController: UIViewController {
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var allTickets : [DFTHeaderType] = [DFTHeaderType]()
+    var firstTimeLoading : Bool = true
     var filteredTickets : [DFTHeaderType]? = nil
     var refreshControl = UIRefreshControl()
     var selectedTicketNumber : String?
@@ -52,7 +53,8 @@ class DFTAllTicketsViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.refresh()
+        
+        _ = self.firstTimeLoading ? self.refresh() : nil
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +71,16 @@ class DFTAllTicketsViewController: UIViewController {
         addNewTicketButton.layer.cornerRadius = addNewTicketButton.frame.width/2
         addNewTicketButton.clipsToBounds = true
         // Do any additional setup after loading the view.
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.firstTimeLoading = false
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        UIView.animate(withDuration: 2, animations: {
+//            self.addNewTicketButton.center.x = self.view.frame.maxX - 100
+//        })
     }
     
     func requestEntities(completionHandler: @escaping (Error?) -> Void) {

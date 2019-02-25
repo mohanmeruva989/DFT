@@ -140,14 +140,19 @@ class DFTCreateNewTicketViewController: UIViewController {
             let strBase64:String = imageData.base64EncodedString(options: .lineLength64Characters)
             attachment.attachmentContent = strBase64
             attachment.attachmentLength = strBase64.lengthOfBytes(using: .utf8)
-            attachment.attachmentName = User.shared.id! + "_" + String(describing: count) + "_" //+ String(describing: Date()) + ".jpeg"
+            attachment.attachmentName = User.shared.id! + "_" + String(describing: count) + "_" + String(describing: Date()) + ".jpeg"
             attachment.attachmentType = "image/jpeg"
             attachment.ServiceProviderId = User.shared.id ?? ""
             attachments.append(attachment)
             count += 1
         }
         self.modalLoadingIndicatorView.dismiss()
-        self.callDocumentService(documentsArray: self.attachments)
+        if attachments.count != 0{
+            self.callDocumentService(documentsArray: self.attachments)
+        }else{
+            self.createDFTPayload()
+        }
+        
 
     }
     func postDFTayload(payload : JSON)  {
@@ -169,14 +174,26 @@ class DFTCreateNewTicketViewController: UIViewController {
             
             urlRequest.httpBody = data!
             let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
-                DispatchQueue.main.async {
-                    self.modalLoadingIndicatorView.dismiss()
-                    self.navigationController?.popViewController(animated: true)
-                }
                 
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments)
-                    print(json)
+                    let json : JSON? = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON
+                    guard let headerId : String = json?["headerId"] as? String else {
+                        print("Error in receiving headerId")
+                        return
+                    }
+                    var message : String = "DFT \(headerId)  has been created Successfully"
+                    DispatchQueue.main.async {
+                        
+                        self.modalLoadingIndicatorView.dismiss()
+                        let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: {_ in
+                            self.navigationController?.popToRootViewController(animated: true)
+                        })
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true)
+                    }
+
+                    
                 } catch let jsonError as NSError {
                     print(jsonError.userInfo)
                 }

@@ -19,6 +19,7 @@ class DFTCreateTableViewCell: UITableViewCell {
      var delegate : DFTTableViewCellDelegate?
     var departments : [String]!
     var reviewers : [Reviewer] = [Reviewer]()
+    var sesApprover : [String]?
     let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
     @IBOutlet var cellLabel: UILabel!
     @IBOutlet var cellTextField: UITextField!
@@ -102,7 +103,6 @@ class DFTCreateTableViewCell: UITableViewCell {
         default:
             print("")
         }
-
     }
     @objc func dismissPicker(){
         self.cellTextField.endEditing(true)
@@ -134,12 +134,24 @@ extension DFTCreateTableViewCell : UITextFieldDelegate{
         default:
             print("")
         }
+       if self.cellLabel.text == "SES Approver"{
+        self.cellTextField.inputAccessoryView = toolBar
+        let pickerView = UIPickerView()
+        self.cellTextField.inputView = pickerView
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        pickerView.tag = 2
+        self.sesApprover = ["", "Operations", "Capital Projects" , "Maintainence"]
+
+        }
     }
 }
 extension DFTCreateTableViewCell : UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView.tag == 0{
         return self.departments.count
+        }else if pickerView.tag == 2 {
+            return self.sesApprover?.count ?? 0
         }else {
             return self.reviewers.count
         }
@@ -152,6 +164,8 @@ extension DFTCreateTableViewCell : UIPickerViewDataSource{
         if pickerView.tag == 1{
             return self.reviewers[row].emailId
 
+        }else if pickerView.tag == 2 {
+            return self.sesApprover?[row] ?? ""
         }else {
             return self.departments[row]
         }
@@ -162,6 +176,9 @@ extension DFTCreateTableViewCell : UIPickerViewDelegate{
         if pickerView.tag == 0 {
         self.dataModel?.department = self.departments[row]
         self.cellTextField.text = self.dataModel?.department
+        }else if pickerView.tag == 2 {
+            self.dataModel?.sesApproverEmail = self.sesApprover?[row] ?? ""
+            self.cellTextField.text = self.dataModel?.sesApproverEmail
         }
         else{
             self.dataModel?.reviewerEmail = self.reviewers[row].emailId

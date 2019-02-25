@@ -142,6 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     }
                 }
             }
+            UserDefaults.standard.set("", forKey: "digiSignUrl")
             allTicketsViewController.loadEntitiesBlock = fetchDFTHeader
 //            let navigationController = UINavigationController(rootViewController: allTicketsViewController)
             let MainNavigationController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MainNavigationController") as! UINavigationController

@@ -39,16 +39,16 @@ class DFTDateTimeTableViewCell: UITableViewCell {
 
         switch cellModel.identifier {
         case "StartDetails":
-            self.label1.text = "Start Date"
+            self.label1.text = "Start Date *"
             self.label2.text = "Start Time"
             
         case "EndDetails":
-            self.label1.text = "End Date"
+            self.label1.text = "End Date *"
             self.label2.text = "End Time"
 
 
         default:
-            print("Invalind Cell identifier")
+            print("Invalid Cell identifier")
         }
         self.textField1.placeholder = "--Select--"
         self.textField2.placeholder = "--Select--"

@@ -8,22 +8,44 @@
 
 import UIKit
 import SAPFiori
+import SAPOData
+import AlamofireImage
 
 class DFTAttestViewController: UIViewController {
     
-    var cellLabels : [String] = ["PO" , "WO", "WBS" , "Accounting Category", "SES Approver" ]
+    var cellLabels : [String] = ["PO" , "WO", "WBS" , "Accounting Category", "SES Approver"  ]
     var ticket : DFTHeaderType?
     var modalLoadingIndicatorView = FUIModalLoadingIndicatorView()
-    @IBOutlet var tableView: UITableView!
+    var role : String?
+    var action : String?
+    var sesApprover : [String] = ["", "abc@def.com", "def@ghi.com" , "jkl@mno.com"]
+
+    @IBOutlet var signatureView: UIImageView!
     
+    @IBOutlet var tableView: UITableView!
+    let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
+
     @IBAction func OnVerifyPressed(_ sender: Any) {
-        self.ticket?.status = "Verified"
-        self.updateTicket()
+        if validateFields(){
+            self.ticket?.status = "Ticket Verified"
+            self.role = "1"
+            self.action = "Review"
+            self.updateTicket()
+        }else {
+            let alertController = UIAlertController(title: "Alert", message: "Please fill all mandatory fields", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: { _ in self.dismiss(animated: true) })
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+
     }
     
     @IBAction func OnRejectPressed(_ sender: Any) {
-        self.ticket?.status = "Rejected"
-        self.rejectTicket()
+            self.ticket?.status = "Ticket Rejected"
+            self.role = "1"
+            self.action = "Reject"
+            self.updateTicket()
+        
     }
     
     override func viewDidLoad() {
@@ -31,13 +53,30 @@ class DFTAttestViewController: UIViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.title = "Verification"
+        if User.shared.signatureUrl != nil {
+            do{
+                try! self.signatureView.af_setImage(withURL:  (User.shared.signatureUrl!.asURL()))
+            }
+            catch {
+                
+            }
+        }
         // Do any additional setup after loading the view.
+    }
+    func validateFields() -> Bool {
+        if self.ticket!.poNumber! == "" ||
+        self.ticket!.workOrderNo! == "" ||
+        self.ticket!.accountingCategory! == "" ||
+            self.ticket!.sesApproverEmail! == ""{
+            return false
+        }
+        return true
     }
     func getJsonBody() -> JSON{
     
         let header : JSON = [
-            "role" : "1",
-            "action" : "Review",
+            "role" : self.role ?? "",
+            "action" : self.action ?? "",
             "dftNumber": String(self.ticket!.dftNumber!),
             "poNumber": self.ticket?.poNumber ?? "",
             "vendorAdminId": self.ticket?.vendorAdminID ?? "",
@@ -63,40 +102,78 @@ class DFTAttestViewController: UIViewController {
             "wbsElement": self.ticket?.wbsElement ?? "",
             "deviceType": "iOS",//TBD
             "deviceId": "123",//TBD
-            "status": "Ticket Verified",//TBD
+            "status": self.ticket?.status ?? "",//TBD
             "createdBy": self.ticket?.createdBy ?? "" ,//TBD
             "updatedBy": User.shared.fullName ?? "",
             "vendorRefNumber": self.ticket?.vendorRefNumber ?? "",//TBD
-            "createdOn":"2018-10-10T17:09:22.002Z" ,//TBD
+            "createdOn": self.ticket?.createdOn?.toString() ?? "" ,//TBD
             "reviewedBy": User.shared.id ?? "",
             "completedBy": self.ticket?.completedBy ?? "",
-            "updatedOn":"2018-10-10T17:09:22.002Z",//TBD
-            "reviewedOn":"",
-            "completedOn":"2018-10-10T17:09:22.002Z",//TBD
+            "updatedOn": LocalDateTime.from(utc: Date()).toString(),//TBD
+            "reviewedOn":LocalDateTime.from(utc: Date()).toString(),
+            "completedOn":"",//TBD
             "well": self.ticket?.well ?? "",//TBD
             "field": self.ticket?.field ?? "",//TBD
             "facility": self.ticket?.facility ?? "",//TBD
             "wellPad": self.ticket?.wellPad ?? "",//TBD
             "ownerId": "P000064",//TBD
-            "startDate":self.ticket?.startDate?.toString() ?? "",//TBD
+            "startDate":self.ticket?.startDate?.toString()[0..<10] ?? "",//TBD
             "startTime":self.ticket?.startTime?.toString() ?? "",//TBD
-            "endDate": self.ticket?.endDate?.toString() ?? "",//TBD
-            "endTime": self.ticket?.endTime?.toString() ?? ""//TBD
+            "endDate": self.ticket?.endDate?.toString()[0..<10] ?? "",//TBD
+            "endTime": self.ticket?.endTime?.toString() ?? "",//TBD
+            "workflowId": self.ticket?.wfInstanceID ?? ""
         ]
+        var attachments : [JSON] = []
+        for each in (self.ticket?.attachments)!{
         
-        let body : [String : Any] =
-            [
+            let attach : JSON =  [
+                "attachmentId": each.attachmentID ?? "",
+                "dftNumber": self.ticket?.dftNumber ?? "",
+                "attachmentName": each.attachmentName ?? "",
+                "dftAttachmentType": each.dftAttachmentType ?? "",
+                "createdByName": each.createdByName ?? "",
+                "createdOn": each.createdOn ?? "",
+                "updatedByName": User.shared.fullName ?? "",
+                "updatedOn": LocalDateTime.from(utc: Date()).toString() ?? "",
+                "attachmentUrl": each.attachmentUrl
+            ]
+            attachments.append(attach)
+        }
+        if attachments.count == 0{
+            let attach : JSON =  [
+                "attachmentId": "",
+                "dftNumber": "",
+                "attachmentName": "",
+                "dftAttachmentType": "",
+                "createdByName": "",
+                "createdOn": "",
+                "updatedByName": "",
+                "updatedOn": "",
+                "attachmentUrl": ""
+            ]
+            attachments.append(attach)
+        }
+        
+        let comments: [JSON] = [[
+            "commentId": "",
+            "dftNumber": "",
+            "commentedByName": "",
+            "commentedOn": "",
+            "comment": ""]]
+        let changeLog: [JSON] = [[
+            "activityId": "",
+            "dftNumber": self.ticket?.dftNumber?.description ?? "",
+            "wfInstanceId": self.ticket?.wfInstanceID ?? "",
+            "status": self.ticket?.status ?? "",
+            "createdOn": self.ticket?.createdOn?.toString() ?? "",
+            "createdByName": self.ticket?.createdBy ?? ""
+        ]]
+        
+        let body : [String : Any] = [
                 "header": header,
-                "comments": self.ticket?.comments,
-                "attachments": self.ticket?.attachments,
-                "changeLog": [[
-                    "activityId": "",
-                    "dftNumber": "",
-                    "wfInstanceId": "",
-                    "status": "",
-                    "createdOn": "2018-10-10T17:09:22.002Z",
-                    "createdByName": ""
-                    ]]
+                "comments": comments,
+                "attachments": attachments,
+                "changeLog": changeLog
         ]
         
         return body
@@ -121,7 +198,19 @@ class DFTAttestViewController: UIViewController {
         let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             DispatchQueue.main.async {
                 self.modalLoadingIndicatorView.dismiss()
-                self.navigationController?.popToRootViewController(animated: true)
+                var message = ""
+                if self.action == "Review"{
+                    message = "Ticket \(self.ticket!.dftNumber!.description) has been Verified successfully"
+                }
+                else{
+                    message = "Ticket \(self.ticket!.dftNumber!.description) has been Rejected successfully"
+                }
+                let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: {_ in
+                    self.navigationController?.popToRootViewController(animated: true)
+                })
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true)
             }
             
             do {
@@ -144,14 +233,7 @@ class DFTAttestViewController: UIViewController {
         dataTask.resume()
 
     }
-    func rejectTicket(){
-        self.ticket?.poNumber = ""
-        self.ticket?.workOrderNo = ""
-        self.ticket?.accountingCategory = ""
-        self.ticket?.wbsElement = ""
-        self.ticket?.costCenter = ""
-        self.ticket?.sesNumber = ""        
-    }
+
     func updateTicket() {
 
         self.verifyTicket()
@@ -166,16 +248,49 @@ extension DFTAttestViewController : UITableViewDataSource{
         let currentCellLabel = self.cellLabels[indexPath.row]
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as! DFTCreateTableViewCell
         cell.cellLabel.text = currentCellLabel
-        cell.cellTextField.placeholder = "--Select--"
+        cell.cellTextField.placeholder = "--Type here--"
         cell.cellTextField.tag = indexPath.row
-        cell.cellTextField.delegate = self
-        return cell
+        if currentCellLabel == "SES Approver"{
+            let pickerView = UIPickerView()
+
+            cell.cellTextField.textContentType = UITextContentType.emailAddress
+            cell.cellTextField.text = self.ticket?.sesApproverEmail
+            cell.cellTextField.inputAccessoryView = toolBar
+            cell.cellTextField.inputView = pickerView
+            pickerView.dataSource = self
+            pickerView.delegate = self
+            pickerView.tag = 1
+
+        }
+            cell.cellTextField.delegate = self
+                return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+    @objc func dismissPicker(){
+        self.view.endEditing(true)
+        self.tableView.reloadData()
+    }
     
     
+}
+extension DFTAttestViewController : UIPickerViewDelegate , UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.sesApprover.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.sesApprover[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.ticket?.sesApproverEmail = self.sesApprover[row]
+    }
 }
 extension DFTAttestViewController : UITableViewDelegate{
     
@@ -192,8 +307,6 @@ extension DFTAttestViewController : UITextFieldDelegate{
             self.ticket?.wbsElement = textField.text
         case 3:
             self.ticket?.accountingCategory = textField.text
-        case 4:
-            self.ticket?.sesNumber = textField.text
         default:
             print("")
         }

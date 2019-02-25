@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 class User {
     
     static let shared = User()
@@ -15,6 +16,9 @@ class User {
     var emailId : String?
     var id : String?
     var role : UserRole?
+    var signatureUrl : String?
+    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
+
     init() {}
     func setUserDetails(json : JSON) {
         let names = json["name"] as! JSON
@@ -34,7 +38,49 @@ class User {
                 self.role = UserRole.ServiceProvider
             }
         }
-        //        self.role =
+        if self.role == UserRole.Reviewer && self.id != nil{
+            self.getSignatureUrl()
+        }    }
+    
+    func getSignatureUrl() {
+    
+        var data : Data?
+        var url = try!
+            URL(string: "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/DFTSignature?$filter=reviewerId eq '\(String(describing: User.shared.id!))'&$format=json".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        
+        var urlRequest = try! URLRequest(url: url!, method: .get)
+        
+        let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            
+            do {
+                let json : JSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON
+                print(json) as! JSON
+                guard let d = json["d"] as? JSON else{
+                    return
+                }
+                guard let results = d["results"] as? [JSON] else{
+                    return
+                }
+                guard let sign = results.last as? JSON else{
+                    return
+                }
+                self.signatureUrl = sign["digitalSignatureUrl"] as? String
+                
+            } catch let jsonError as NSError {
+                print(jsonError.userInfo)
+            }
+            
+            guard let _ = data, error == nil else {
+                print("Error in PostinG create payload")
+                return }
+            do {
+                print(response)
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        dataTask.resume()
+        
     }
 }
 enum UserRole {
