@@ -14,6 +14,7 @@ class DFTDateTimeTableViewCell: UITableViewCell {
     var cellModel : CellModel?
     var dataModel : DFTHeaderType?
     let dateFormatter = DateFormatter()
+    let toolBar = UIToolbar()
     @IBOutlet var label1: UILabel!
     @IBOutlet var label2: UILabel!
     @IBOutlet var textField1: UITextField!
@@ -31,9 +32,7 @@ class DFTDateTimeTableViewCell: UITableViewCell {
     func setData(_ cellModel : CellModel) {
         self.cellModel = cellModel
         self.setInputViews()
-        let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
-        toolBar.backgroundColor = UIColor(hexString: "445E75")
-
+        setupToolBar()
         self.textField2.inputAccessoryView = toolBar
         self.textField1.inputAccessoryView = toolBar
 
@@ -98,13 +97,56 @@ extension DFTDateTimeTableViewCell : UITextFieldDelegate{
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
     }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("Date Selected")
+    }
     @objc func dismissPicker(){
+        let dateTimeString : String = LocalDateTime.from(utc: Date(), in: TimeZone.current).toString()
         if self.textField1.isEditing && cellModel?.identifier == "StartDetails"{
             if self.dataModel?.startDate == nil {
                 self.dataModel?.startDate =  LocalDateTime.from(utc : Date())
-            }
+                self.textField1.text =  convertTimeStamp(dateTimeString: dateTimeString)
 
+            }
         }
-     self.endEditing(true)
+        if self.textField2.isEditing && cellModel?.identifier == "StartDetails"{
+            if self.dataModel?.startTime == nil {
+                self.dataModel?.startTime =  LocalTime.from(utc: Date())
+                self.textField2.text =  LocalTime.from(utc: Date(), in: TimeZone.current).toString()
+
+            }
+        }
+        if self.textField1.isEditing && cellModel?.identifier == "EndDetails"{
+            if self.dataModel?.endDate == nil {
+                self.dataModel?.endDate =  LocalDateTime.from(utc : Date())
+                self.textField1.text =  convertTimeStamp(dateTimeString: dateTimeString)
+
+            }
+        }
+        if self.textField2.isEditing && cellModel?.identifier == "EndDetails"{
+            if self.dataModel?.endTime == nil {
+                self.dataModel?.endTime =  LocalTime.from(utc: Date())
+                self.textField2.text =  LocalTime.from(utc: Date(), in: TimeZone.current).toString()
+
+            }
+        }
+
+
+        print("End Editing")
+//        self.textField1.endEditing(true)
+      self.endEditing(true)
+    }
+    func setupToolBar() {
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.black
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissPicker))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        
+        toolBar.setItems([ spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
     }
 }

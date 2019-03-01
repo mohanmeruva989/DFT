@@ -18,12 +18,13 @@ class DFTTicketDetailViewController: UIViewController {
         didSet{
             DispatchQueue.main.async {
                 if self.ticketComments != nil {
+                    if !self.ticketComments!.isEmpty{
                 self.commentsView.text = (self.ticketComments!.last!)["comment"] as? String
+                    }
                 }
             }
         }
     }
-    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
 
     @IBOutlet var attachmentView: UIView!
     @IBOutlet var nextButton: UIButton!
@@ -49,6 +50,7 @@ class DFTTicketDetailViewController: UIViewController {
     @IBOutlet var tableView2: UITableView!
     @IBOutlet var commentsView: UITextView!
     @IBOutlet var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
@@ -88,13 +90,21 @@ extension DFTTicketDetailViewController : UITableViewDataSource{
         
         return cellLabels.count
     }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView.tag == 2 {
+            return "Attachments"
+        }
+        return ""
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.tag == 2{
             let cell = self.tableView2.dequeueReusableCell(withIdentifier: "DFTGalleryTableViewCell") as! DFTGalleryTableViewCell
-            let id = URL(string: self.ticketAttachments![indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
+            let id = URL(string: self.ticketAttachments?[indexPath.row]["attachmentUrl"] as! String)?.lastPathComponent
             let absUrl = URL(string: "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + id!)
-            cell.galleryImage.af_setImage(withURL: absUrl!, placeholderImage: UIImage(named: "Imageplaceholder"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: .curlDown(1), runImageTransitionIfCached: false, completion: nil)
-            cell.label.text  =  self.ticketAttachments![indexPath.row]["attachmentName"] as? String
+            cell.label.text  =  self.ticketAttachments?[indexPath.row]["attachmentName"] as? String
+//            cell.uploadedOnLabel.text = self.ticketAttachments?[indexPath.row]["createdOn"] as? Date
+            cell.galleryImage.af_setImage(withURL: absUrl!, placeholderImage: UIImage(named: "Imageplaceholder"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: .curlDown(0.8), runImageTransitionIfCached: false, completion: nil)
+            
                 return cell
         }
         
@@ -212,7 +222,7 @@ extension DFTTicketDetailViewController {
             let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/getFieldTicketDetails.xsodata/DFTHeader(\(self.ticket!.dftNumber!))?$expand=Comments,ChangeLogs,Attachments&$format=json".asURL()
             let urlRequest = try! URLRequest(url: url, method: .get)
             
-            let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
                 DispatchQueue.main.async {
                 }
                 
@@ -233,9 +243,12 @@ extension DFTTicketDetailViewController {
                     guard let comm2 = comm["results"] as? [JSON] else{
                         return
                     }
-                    self.ticketAttachments = results
-                    self.ticketComments = comm2
-                    self.tableView2.reloadData()
+                    DispatchQueue.main.async {
+                        self.ticketAttachments = results
+                        self.ticketComments = comm2
+                        self.tableView2.reloadData()
+                    }
+                    
                     print(json)
                 } catch let jsonError as NSError {
                     print(jsonError.userInfo)

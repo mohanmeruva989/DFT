@@ -65,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     func onboarded(onboardingContext: OnboardingContext, onboarding _: Bool) {
         self.sapURLSession = onboardingContext.sapURLSession
+        DFTNetworkManager.shared.sapUrlSession = onboardingContext.sapURLSession
         var configurationURL = (onboardingContext.info[OnboardingInfoKey.sapcpmsSettingsParameters] as! SAPcpmsSettingsParameters).url(forDestination: "com.incture.dftxsodata")
         if configurationURL == nil {
             configurationURL = onboardingContext.info[OnboardingInfoKey.authenticationURL] as? URL
@@ -77,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let urlSession = self.sapURLSession
         let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.getloggedinUser.dest/services/userapi/attributes".asURL()
         let urlRequest = try! URLRequest(url: url, method: .get)
-        let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
             print("got user info")
             let data = try! JSONSerialization.jsonObject(with : data!) as! JSON
             print(data)
@@ -97,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let urlSession = self.sapURLSession
         let url = try! ("https://mobile-hkea136m18.hana.ondemand.com/InctureIDPDestination/service/scim/Users/" + id).asURL()
         let urlRequest = try! URLRequest(url: url, method: .get)
-        let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
             let data = try! JSONSerialization.jsonObject(with : data!) as! JSON
             print("got the user detailed info")
             //Parse the User

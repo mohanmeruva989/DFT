@@ -31,17 +31,15 @@ class DFTCreateNewTicketViewController: UIViewController {
     var wellpads = [Wellpad]()
     var fields = [Field]()
     var facilities = [Facility]()
-    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
-
-    @IBOutlet var galleryView: UICollectionView!
     
+    @IBOutlet var galleryView: UICollectionView!
     @IBOutlet var commentsTextView: UITextView!
     @IBAction func addAttachments(_ sender: Any) {
         if convertedImages.count < 3{
         self.attachmentOptions()
         }
         else{
-            let alertController = UIAlertController(title: "", message: nil, preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Alert", message: "Maximux of 3 images can be attached", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default, handler: { _ in self.dismiss(animated: true) })
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
@@ -80,12 +78,15 @@ class DFTCreateNewTicketViewController: UIViewController {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView.allowsSelection = false
         self.viewModel = CreateTicketViewModel(DFTType: .GeneralDFT)
         self.tableView.tableFooterView = UIView()
         self.attachmentView.isHidden = true
         self.galleryView.delegate = self
         self.galleryView.dataSource = self
         self.getLocationInfo()
+        self.imagePickerController.delegate = self
+        
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -173,7 +174,7 @@ class DFTCreateNewTicketViewController: UIViewController {
             }
             
             urlRequest.httpBody = data!
-            let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
                 
                 do {
                     let json : JSON? = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? JSON
@@ -269,8 +270,8 @@ class DFTCreateNewTicketViewController: UIViewController {
             "dftNumber": "",
             "attachmentName": each.attachmentName,
             "dftAttachmentType": each.attachmentType,
-            "createdByName": "",
-            "createdOn": "2018-10-10T17:09:22.002Z",
+            "createdByName": User.shared.fullName ?? "",
+            "createdOn": LocalDateTime.from(utc: Date()).toString(),
             "updatedByName": "",
             "updatedOn": "2018-10-10T17:09:22.002Z",
             "attachmentUrl": each.attachmentUrl ?? ""
@@ -311,14 +312,14 @@ extension DFTCreateNewTicketViewController : UITableViewDataSource{
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellData : CellModel = (self.viewModel?.tableViewModel?[indexPath.row])!
-        let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
-        toolBar.backgroundColor = UIColor(hexString: "445E75")
+//        let toolBar = self.toolbarPicker(mySelect: #selector(dismissPicker))
+//        toolBar.backgroundColor = UIColor(hexString: "445E75")
         switch cellData.dequeCell {
         case "DFTCreateTableViewCell":
             let  cell = tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell")! as! DFTCreateTableViewCell
             cell.dataModel = self.dataModel
             cell.setData(cellData)
-            cell.cellTextField.inputAccessoryView = toolBar
+//            cell.cellTextField.inputAccessoryView = toolBar
             cell.delegate = self
           return cell
         case "DFTDateTimeTableViewCell" :
@@ -333,8 +334,8 @@ extension DFTCreateNewTicketViewController : UITableViewDataSource{
 
     }
     @objc func dismissPicker(){
+        print("alksdjf")
         view.endEditing(true)
-        
     }
     
 }
@@ -355,10 +356,9 @@ extension DFTCreateNewTicketViewController : UIPickerViewDelegate{
     override func didChangeValue(forKey key: String) {
         self.viewModel?.tableViewModel
     }
-}
-extension UIToolbar {
+
     
-    func ToolbarPicker(mySelect : Selector) -> UIToolbar {
+    func toolbarPicker(mySelect : Selector) -> UIToolbar {
         
         let toolBar = UIToolbar()
         
@@ -588,6 +588,9 @@ extension DFTCreateNewTicketViewController : NohanaImagePickerControllerDelegate
 
     
 }
+extension DFTCreateNewTicketViewController : UINavigationControllerDelegate{
+    
+}
 extension DFTCreateNewTicketViewController : UIImagePickerControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         pickedCameraImage = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage)!
@@ -666,7 +669,7 @@ extension DFTCreateNewTicketViewController{
             
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = data!
-            let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
                 DispatchQueue.main.async {
                     self.modalLoadingIndicatorView.dismiss()
                 }

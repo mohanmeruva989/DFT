@@ -19,11 +19,12 @@ class DFTAttestViewController: UIViewController {
     var role : String?
     var action : String?
     var sesApprover : [String] = ["", "abc@def.com", "def@ghi.com" , "jkl@mno.com"]
-
+    var attestViewModel : AttestTicketViewModel?
+    var selectedIndexPath : IndexPath?
     @IBOutlet var signatureView: UIImageView!
     
     @IBOutlet var tableView: UITableView!
-    let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
+    let toolBar = UIToolbar().toolbarPicker(mySelect: #selector(dismissPicker))
 
     @IBAction func OnVerifyPressed(_ sender: Any) {
         if validateFields(){
@@ -53,6 +54,7 @@ class DFTAttestViewController: UIViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.title = "Verification"
+        self.attestViewModel = AttestTicketViewModel()
         if User.shared.signatureUrl != nil {
             do{
                 try! self.signatureView.af_setImage(withURL:  (User.shared.signatureUrl!.asURL()))
@@ -62,6 +64,10 @@ class DFTAttestViewController: UIViewController {
             }
         }
         // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.reloadData()
     }
     func validateFields() -> Bool {
         if self.ticket!.poNumber! == "" ||
@@ -89,11 +95,11 @@ class DFTAttestViewController: UIViewController {
             "serviceProviderName": self.ticket?.serviceProviderName ?? "",
             "ReviewerId": User.shared.id ?? "" , //TBD
             "ReviewerName": User.shared.fullName ?? "",
-            "ReviewerEmail": User.shared.emailId ?? "",//TBD
+            "ReviewerEmail": User.shared.emailId ?? "",
             "sesApproverName": self.ticket?.sesApproverName ?? "",
             "sesApproverEmail": self.ticket?.sesApproverEmail ?? "",
-            "department": self.ticket?.department ?? "",//TBD
-            "location": self.ticket?.location ?? "",//TBD
+            "department": self.ticket?.department ?? "",
+            "location": self.ticket?.location ?? "",
             "accountingCategory": self.ticket?.accountingCategory ?? "",
             "costCenter": self.ticket?.costCenter ?? "",
             "sesNumber": self.ticket?.sesNumber ?? "",
@@ -139,35 +145,43 @@ class DFTAttestViewController: UIViewController {
             ]
             attachments.append(attach)
         }
-        if attachments.count == 0{
-            let attach : JSON =  [
-                "attachmentId": "",
-                "dftNumber": "",
-                "attachmentName": "",
-                "dftAttachmentType": "",
-                "createdByName": "",
-                "createdOn": "",
-                "updatedByName": "",
-                "updatedOn": "",
-                "attachmentUrl": ""
-            ]
-            attachments.append(attach)
-        }
-        
-        let comments: [JSON] = [[
-            "commentId": "",
-            "dftNumber": "",
-            "commentedByName": "",
-            "commentedOn": "",
-            "comment": ""]]
-        let changeLog: [JSON] = [[
+//        if attachments.count == 0{
+//            let attach : JSON =  [
+//                "attachmentId": "",
+//                "dftNumber": "",
+//                "attachmentName": "",
+//                "dftAttachmentType": "",
+//                "createdByName": "",
+//                "createdOn": "",
+//                "updatedByName": "",
+//                "updatedOn": "",
+//                "attachmentUrl": ""
+//            ]
+//            attachments.append(attach)
+//        }
+
+        let changeLog : JSON =  [
             "activityId": "",
             "dftNumber": self.ticket?.dftNumber?.description ?? "",
-            "wfInstanceId": self.ticket?.wfInstanceID ?? "",
+            "wfInstanceId": "",
             "status": self.ticket?.status ?? "",
-            "createdOn": self.ticket?.createdOn?.toString() ?? "",
-            "createdByName": self.ticket?.createdBy ?? ""
-        ]]
+            "createdOn": Date().description ,
+            "createdByName": User.shared.fullName ?? ""
+            ]
+  
+        var comments : [JSON] = []
+        for each in (self.ticket?.comments)!{
+            
+            let attach : JSON =  [
+                "commentId": each.commentID?.description ?? "",
+                "dftNumber": each.dftNumber?.description ?? "",
+                "commentedByName": each.commentedByName ?? "",
+                "commentedOn": each.commentedOn ?? "",
+                "comment": each.comment ?? ""]
+            comments.append(attach)
+        }
+
+        
         
         let body : [String : Any] = [
                 "header": header,
@@ -180,7 +194,6 @@ class DFTAttestViewController: UIViewController {
     }
     func verifyTicket() {
         var data : Data?
-        let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
         let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.incture.basexsodata/updateFieldTicket.xsjs".asURL()
         var urlRequest = try! URLRequest(url: url, method: .post)
         do {
@@ -195,7 +208,7 @@ class DFTAttestViewController: UIViewController {
         }
         
         urlRequest.httpBody = data!
-        let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
             DispatchQueue.main.async {
                 self.modalLoadingIndicatorView.dismiss()
                 var message = ""
@@ -238,31 +251,48 @@ class DFTAttestViewController: UIViewController {
 
         self.verifyTicket()
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         if segue.identifier == "showGenericSearchController"{
+           if let indexPath = self.selectedIndexPath{
+            if let dest = segue.destination as? DFTGenericSearchViewController{
+                 dest.cellModel = self.attestViewModel?.tableViewModel![indexPath.row]
+                 dest.ticket  = self.ticket
+                }
+            }
+        }
+    }
 }
 extension DFTAttestViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellLabels.count
+        return attestViewModel?.tableViewModel?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let currentCellLabel = self.cellLabels[indexPath.row]
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as! DFTCreateTableViewCell
-        cell.cellLabel.text = currentCellLabel
-        cell.cellTextField.placeholder = "--Type here--"
-        cell.cellTextField.tag = indexPath.row
-        if currentCellLabel == "SES Approver"{
-            let pickerView = UIPickerView()
-
-            cell.cellTextField.textContentType = UITextContentType.emailAddress
-            cell.cellTextField.text = self.ticket?.sesApproverEmail
-            cell.cellTextField.inputAccessoryView = toolBar
-            cell.cellTextField.inputView = pickerView
-            pickerView.dataSource = self
-            pickerView.delegate = self
-            pickerView.tag = 1
-
-        }
-            cell.cellTextField.delegate = self
+        let cellModel : CellModel = attestViewModel!.tableViewModel![indexPath.row]
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTCreateTableViewCell") as!
+        DFTCreateTableViewCell
+        cell.setData(cellModel)
+        
+        
+        
+        
+//        let currentCellLabel = self.cellLabels[indexPath.row]
+//        cell.cellLabel.text = currentCellLabel
+//        cell.cellTextField.placeholder = "--Type here--"
+//        cell.cellTextField.tag = indexPath.row
+//        if currentCellLabel == "SES Approver"{
+//            let pickerView = UIPickerView()
+//            cell.cellTextField.placeholder = "--Select--"
+//            cell.cellTextField.textContentType = UITextContentType.emailAddress
+//            cell.cellTextField.text = self.ticket?.sesApproverEmail
+//            cell.cellTextField.inputAccessoryView = toolBar
+//            cell.cellTextField.inputView = pickerView
+//            pickerView.dataSource = self
+//            pickerView.delegate = self
+//            pickerView.tag = 1
+//
+//        }
+//            cell.cellTextField.delegate = self
                 return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -293,6 +323,15 @@ extension DFTAttestViewController : UIPickerViewDelegate , UIPickerViewDataSourc
     }
 }
 extension DFTAttestViewController : UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch self.attestViewModel!.tableViewModel![indexPath.row].identifier {
+        case "PO","WO","WBS","AccountingCategory", "SESApprover":
+            self.selectedIndexPath = indexPath
+            self.performSegue(withIdentifier: "showGenericSearchController", sender: self)
+        default:
+            print("asdfasf")
+        }
+    }
     
 }
 extension DFTAttestViewController : UITextFieldDelegate{
@@ -310,5 +349,10 @@ extension DFTAttestViewController : UITextFieldDelegate{
         default:
             print("")
         }
+        textField.resignFirstResponder()
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

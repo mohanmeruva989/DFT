@@ -14,7 +14,15 @@ class DFTLocationViewController: UIViewController {
     var wellpads = [Wellpad]()
     var fields = [Field]()
     var facilities = [Facility]()
-    var SelectedIndex :IndexPath? = nil
+    var SelectedIndex :IndexPath? = nil{
+        didSet{
+            if SelectedIndex != nil{
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(locationSelected))
+            }else{
+            self.navigationItem.rightBarButtonItem = nil
+            }
+        }
+    }
     
     var selectedField : String = ""
     var selectedFacility : String = ""
@@ -70,7 +78,6 @@ class DFTLocationViewController: UIViewController {
         self.tableView.isEditing = true
         self.title = self.currentLocationType
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(locationSelected))
 
     }
     

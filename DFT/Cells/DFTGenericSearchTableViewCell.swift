@@ -1,19 +1,16 @@
 //
-//  DFTGalleryTableViewCell.swift
+//  DFTGenericSearchTableViewCell.swift
 //  DFT
 //
-//  Created by Mohan on 22/02/19.
+//  Created by Mohan on 27/02/19.
 //  Copyright © 2019 SAP. All rights reserved.
 //
 
 import UIKit
 
-class DFTGalleryTableViewCell: UITableViewCell {
-    var senderController : DFTCreateNewTicketViewController?
-    
-    @IBOutlet var uploadedOnLabel: UILabel!
-    @IBOutlet var label: UILabel!
-    @IBOutlet var galleryImage: UIImageView!
+class DFTGenericSearchTableViewCell: UITableViewCell {
+
+    @IBOutlet var label1: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -23,6 +20,9 @@ class DFTGalleryTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    func setData(currentObj : TableViewDisplayable) {
+        self.label1.text = currentObj.label1
     }
 
 }

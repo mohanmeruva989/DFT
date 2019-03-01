@@ -22,6 +22,9 @@ class DFTLocationTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    override func prepareForReuse() {
+        self.cellButton.titleLabel?.text = ""
+    }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

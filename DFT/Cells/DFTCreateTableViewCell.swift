@@ -20,7 +20,10 @@ class DFTCreateTableViewCell: UITableViewCell {
     var departments : [String]!
     var reviewers : [Reviewer] = [Reviewer]()
     var sesApprover : [String]?
-    let toolBar = UIToolbar().ToolbarPicker(mySelect: #selector(dismissPicker))
+    let toolBar = UIToolbar()
+
+    
+//    let toolBar = UIToolbar().toolbarPicker(mySelect: #selector(dismissPicker))
     @IBOutlet var cellLabel: UILabel!
     @IBOutlet var cellTextField: UITextField!
     
@@ -36,11 +39,16 @@ class DFTCreateTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     func setData(_ cellModel : CellModel) {
+        setupToolBar()
         self.cellModel = cellModel
         self.cellLabel.text = cellModel.labelName
+        self.cellTextField.text = cellModel.inputValue as? String
+        self.cellTextField.isUserInteractionEnabled = false
         switch self.cellModel?.identifier {
         case "VendorRefNo":
             self.cellTextField?.text = self.dataModel?.vendorRefNumber ?? ""
+            self.cellTextField.isUserInteractionEnabled = true
+            self.cellTextField.inputAccessoryView = toolBar
         case "Department":
             let pickerView = UIPickerView()
             self.departments = ["", "Operations", "Capital Projects" , "Maintainence"]
@@ -50,6 +58,8 @@ class DFTCreateTableViewCell: UITableViewCell {
             pickerView.delegate = self
             pickerView.tag = 0
             self.cellTextField.inputAccessoryView = toolBar
+            self.cellTextField.isUserInteractionEnabled = true
+
         case "Reviewer":
             let pickerView = UIPickerView()
             if self.reviewers.count == 0 {
@@ -65,8 +75,11 @@ class DFTCreateTableViewCell: UITableViewCell {
             pickerView.dataSource = self
             pickerView.delegate = self
             pickerView.tag = 1
+            self.cellTextField.isUserInteractionEnabled = true
+
         case "Location" :
-            print("")
+            self.cellTextField.isUserInteractionEnabled = true
+
             var location : String = ""
             
             if self.dataModel!.field == "" || self.dataModel!.field == nil{
@@ -99,10 +112,25 @@ class DFTCreateTableViewCell: UITableViewCell {
             self.dataModel?.location = location
             self.cellTextField.text = location
             return
-
+//        case "PO":
+            
         default:
             print("")
         }
+    }
+    
+    func setupToolBar() {
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.black
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissPicker))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        
+        toolBar.setItems([ spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+    
     }
     @objc func dismissPicker(){
         self.cellTextField.endEditing(true)
@@ -120,6 +148,8 @@ extension DFTCreateTableViewCell : UITextFieldDelegate{
             print("")
         }
         self.delegate?.updateModel(cellModel: self.cellModel!)
+        textField.resignFirstResponder()
+
     }
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.cellTextField.text = textField.text
@@ -144,6 +174,10 @@ extension DFTCreateTableViewCell : UITextFieldDelegate{
         self.sesApprover = ["", "Operations", "Capital Projects" , "Maintainence"]
 
         }
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 extension DFTCreateTableViewCell : UIPickerViewDataSource{
@@ -186,5 +220,25 @@ extension DFTCreateTableViewCell : UIPickerViewDelegate{
             self.dataModel?.reviewerName = self.reviewers[row].name
             self.cellTextField.text = self.dataModel?.reviewerEmail
         }
+    }
+    
+}
+extension UIToolbar{
+    func toolbarPicker(mySelect : Selector) -> UIToolbar {
+        
+        let toolBar = UIToolbar()
+        
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.black
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: mySelect)
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        
+        toolBar.setItems([ spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        return toolBar
     }
 }

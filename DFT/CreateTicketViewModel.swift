@@ -16,12 +16,12 @@ class CreateTicketViewModel {
         switch DFTType {
         case .GeneralDFT:
             var model = [CellModel]()
-            model.append(CellModel(labelName: "Vendor Ref No", inputType: .TextField, identifier: "VendorRefNo", dequeCell: "DFTCreateTableViewCell"))
-            model.append(CellModel(labelName: "Department", inputType: .ValuePicker, identifier: "Department", dequeCell: "DFTCreateTableViewCell"))
-            model.append(CellModel(labelName: "Location", inputType: .TextField, identifier: "Location", dequeCell: "DFTCreateTableViewCell"))
-            model.append(CellModel(labelName: "Reviewer", inputType: .TextField, identifier: "Reviewer", dequeCell: "DFTCreateTableViewCell"))
+            model.append(CellModel(labelName: "Vendor Ref No *", inputType: .TextField, identifier: "VendorRefNo", dequeCell: "DFTCreateTableViewCell"))
+            model.append(CellModel(labelName: "Department *", inputType: .ValuePicker, identifier: "Department", dequeCell: "DFTCreateTableViewCell"))
+            model.append(CellModel(labelName: "Location *", inputType: .TextField, identifier: "Location", dequeCell: "DFTCreateTableViewCell"))
+            model.append(CellModel(labelName: "Reviewer *", inputType: .TextField, identifier: "Reviewer", dequeCell: "DFTCreateTableViewCell"))
             model.append(CellModel(labelName: "StartDetails", inputType: .TextField, identifier: "StartDetails", dequeCell: "DFTDateTimeTableViewCell"))
-            model.append(CellModel(labelName: "EndDetails", inputType: .TextField, identifier: "EndDetails", dequeCell: "DFTDateTimeTableViewCell"))
+            model.append(CellModel(labelName: "EndDetails ", inputType: .TextField, identifier: "EndDetails", dequeCell: "DFTDateTimeTableViewCell"))
 
             self.tableViewModel = model
         case .Attachment:
@@ -58,6 +58,7 @@ enum CellInputType {
     case TextView
     case DatePicker
     case ImagePicker
+    case SearchPicker
 }
 enum DFTType {
     case GeneralDFT

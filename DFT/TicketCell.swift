@@ -59,13 +59,14 @@ class TicketCell: UITableViewCell {
         else{
             locationLabel.text = "   -   "
         }
-        if ticketHeader.status == "Created"{
-            markerView.backgroundColor = UIColor(red : 246/255, green : 142/255, blue : 86/255, alpha : 1)
+        if ticketHeader.status == "Ticket Created"{
+            markerView.backgroundColor = UIColor.orange
+//            UIColor(red : 246/255, green : 142/255, blue : 86/255, alpha : 1)
         }
-        else if ticketHeader.status == "Ticket Reject"{
+        else if ticketHeader.status == "Ticket Rejected"{
             markerView.backgroundColor = UIColor.red
         }
-        else if ticketHeader.status == "Ticket Review"{
+        else if ticketHeader.status == "Ticket Reviewed"{
             markerView.backgroundColor = UIColor(red : 77/255, green : 184/255, blue : 255/255, alpha : 1)
         }
         else if ticketHeader.status == "Ticket Verified"{

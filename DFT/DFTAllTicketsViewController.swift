@@ -26,7 +26,7 @@ class DFTAllTicketsViewController: UIViewController {
         // Setup the Search Controller
         searchController.delegate = self
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = true
+        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for DFT's "
         searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchBar.delegate = self
@@ -56,6 +56,22 @@ class DFTAllTicketsViewController: UIViewController {
         
         _ = self.firstTimeLoading ? self.refresh() : nil
     }
+    func animateTableView() {
+        self.tableView.isHidden = true
+        let tableViewHeight = self.tableView.bounds.size.height
+        for i in self.tableView.visibleCells{
+            i.transform = CGAffineTransform(translationX: 0, y: tableViewHeight)
+        }
+        self.tableView.isHidden = false
+        var index = 0
+        for j in self.tableView.visibleCells{
+            UIView.animate(withDuration: 1, delay: 0.08*Double(index), options: .transitionFlipFromTop, animations: {
+                j.transform = CGAffineTransform(translationX: 0, y: 0)
+            }, completion: nil)
+            index += 1
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.requestEntities(completionHandler: {_ in self.tableView.reloadData()})
@@ -78,13 +94,14 @@ class DFTAllTicketsViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        UIView.animate(withDuration: 2, animations: {
-//            self.addNewTicketButton.center.x = self.view.frame.maxX - 100
-//        })
+
+
     }
     
     func requestEntities(completionHandler: @escaping (Error?) -> Void) {
-        self.modalLoadingIndicatorView.show(inView: self.view, animated: true)
+        DispatchQueue.main.async {
+            self.modalLoadingIndicatorView.show(inView: self.view, animated: true)
+        }
         self.loadEntitiesBlock!() { entities, error in
             self.modalLoadingIndicatorView.dismiss()
             if let error = error {
@@ -92,11 +109,17 @@ class DFTAllTicketsViewController: UIViewController {
                 return
             }
             self.allTickets = entities!
-            self.allTickets = self.allTickets.sorted{ $0.dftNumber! > $1.dftNumber! }
+            self.allTickets = self.allTickets.sorted{ $0.dftNumber! > $1.dftNumber!}
+            self.tableView.reloadData()
+
+            self.modalLoadingIndicatorView.dismiss()
             completionHandler(nil)
+
         }
     }
     @objc func refresh() {
+    
+        if self.modalLoadingIndicatorView.isAnimating == false {
         self.modalLoadingIndicatorView.show(inView: self.view)
         let oq = OperationQueue()
         oq.addOperation({
@@ -108,7 +131,7 @@ class DFTAllTicketsViewController: UIViewController {
                 })
         })
     }
-
+    }
 
 
 }
@@ -144,10 +167,26 @@ extension DFTAllTicketsViewController : UITableViewDataSource{
 }
 extension DFTAllTicketsViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if User.shared.role == UserRole.Reviewer {
+        if User.shared.role == UserRole.Reviewer{
+        if let sc = self.navigationItem.searchController {
+            if sc.isActive{
+                self.selectedTicketNumber = String(self.filteredTickets![indexPath.row].dftNumber!)
+                self.selectedTicket = self.filteredTickets![indexPath.row]
+                self.navigationItem.searchController?.isActive = false
+                self.performSegue(withIdentifier: "TicketDetail", sender: self)
+            }
+            else{
+                self.selectedTicketNumber = String(self.allTickets[indexPath.row].dftNumber!)
+                self.selectedTicket = self.allTickets[indexPath.row]
+                self.navigationItem.searchController = nil
+                self.performSegue(withIdentifier: "TicketDetail", sender: self)
+            }
+        }
+        else {
             self.selectedTicketNumber = String(self.allTickets[indexPath.row].dftNumber!)
             self.selectedTicket = self.allTickets[indexPath.row]
             self.performSegue(withIdentifier: "TicketDetail", sender: self)
+            }
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -170,13 +209,12 @@ extension DFTAllTicketsViewController : UISearchResultsUpdating{
 }
 extension DFTAllTicketsViewController : UISearchBarDelegate{
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.navigationItem.searchController = nil
+        self.navigationItem.searchController?.isActive = false
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.updateSearchResults(for: self.searchController)
     }
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        self.navigationItem.searchController = nil
         return true
     }
     
@@ -184,3 +222,4 @@ extension DFTAllTicketsViewController : UISearchBarDelegate{
 extension DFTAllTicketsViewController : UISearchControllerDelegate{
     
 }
+

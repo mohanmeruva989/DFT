@@ -16,6 +16,11 @@
 		0128C3F2221C13D500528EBD /* Reviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0128C3F1221C13D500528EBD /* Reviewer.swift */; };
 		0128C3F4221C194A00528EBD /* DFTLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0128C3F3221C194A00528EBD /* DFTLocationViewController.swift */; };
 		0128C3F8221C392D00528EBD /* DFTLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0128C3F7221C392D00528EBD /* DFTLocationTableViewCell.swift */; };
+		014A313022259B9200FFCDC3 /* NetworkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014A312F22259B9100FFCDC3 /* NetworkManger.swift */; };
+		015FFE802226CFAB00C51715 /* DFTGenericSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFE7F2226CFAB00C51715 /* DFTGenericSearchViewController.swift */; };
+		015FFE822226D4AB00C51715 /* DFTGenericSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFE812226D4AB00C51715 /* DFTGenericSearchTableViewCell.swift */; };
+		015FFE842226DA1000C51715 /* AttestTicketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFE832226DA1000C51715 /* AttestTicketViewModel.swift */; };
+		015FFE86222710B300C51715 /* AttestInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFE85222710B300C51715 /* AttestInputModel.swift */; };
 		016AEF11221A9353003E4165 /* DFTTicketDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016AEF10221A9353003E4165 /* DFTTicketDetailViewController.swift */; };
 		016AEF13221A96CD003E4165 /* DFTAttestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016AEF12221A96CD003E4165 /* DFTAttestViewController.swift */; };
 		01757D8622155360001A2ACF /* DFTCreateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757D8522155360001A2ACF /* DFTCreateTableViewCell.swift */; };
@@ -110,6 +115,11 @@
 		0128C3F1221C13D500528EBD /* Reviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reviewer.swift; sourceTree = "<group>"; };
 		0128C3F3221C194A00528EBD /* DFTLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTLocationViewController.swift; sourceTree = "<group>"; };
 		0128C3F7221C392D00528EBD /* DFTLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTLocationTableViewCell.swift; sourceTree = "<group>"; };
+		014A312F22259B9100FFCDC3 /* NetworkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManger.swift; sourceTree = "<group>"; };
+		015FFE7F2226CFAB00C51715 /* DFTGenericSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTGenericSearchViewController.swift; sourceTree = "<group>"; };
+		015FFE812226D4AB00C51715 /* DFTGenericSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTGenericSearchTableViewCell.swift; sourceTree = "<group>"; };
+		015FFE832226DA1000C51715 /* AttestTicketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttestTicketViewModel.swift; sourceTree = "<group>"; };
+		015FFE85222710B300C51715 /* AttestInputModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttestInputModel.swift; sourceTree = "<group>"; };
 		016AEF10221A9353003E4165 /* DFTTicketDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTTicketDetailViewController.swift; sourceTree = "<group>"; };
 		016AEF12221A96CD003E4165 /* DFTAttestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTAttestViewController.swift; sourceTree = "<group>"; };
 		01757D8522155360001A2ACF /* DFTCreateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFTCreateTableViewCell.swift; sourceTree = "<group>"; };
@@ -203,6 +213,7 @@
 				0128C3EB221BE38E00528EBD /* DFTGalleryCollectionViewCell.swift */,
 				0128C3F7221C392D00528EBD /* DFTLocationTableViewCell.swift */,
 				0176CFAB222005C900CE66CD /* DFTGalleryTableViewCell.swift */,
+				015FFE812226D4AB00C51715 /* DFTGenericSearchTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -248,6 +259,8 @@
 				0128C3ED221BE83400528EBD /* Attachment.swift */,
 				0128C3EF221C0F8B00528EBD /* Location.swift */,
 				0128C3F1221C13D500528EBD /* Reviewer.swift */,
+				015FFE832226DA1000C51715 /* AttestTicketViewModel.swift */,
+				015FFE85222710B300C51715 /* AttestInputModel.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -278,6 +291,7 @@
 				016AEF10221A9353003E4165 /* DFTTicketDetailViewController.swift */,
 				016AEF12221A96CD003E4165 /* DFTAttestViewController.swift */,
 				0128C3F3221C194A00528EBD /* DFTLocationViewController.swift */,
+				015FFE7F2226CFAB00C51715 /* DFTGenericSearchViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -326,6 +340,7 @@
 				7A1315C31D4B982000A5DA56 /* LaunchScreen.storyboard */,
 				1277F7601F8E66AC0060AF58 /* SAPLogo@2x.png */,
 				7A1315C61D4B982000A5DA56 /* Info.plist */,
+				014A312F22259B9100FFCDC3 /* NetworkManger.swift */,
 			);
 			path = DFT;
 			sourceTree = "<group>";
@@ -533,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				128B53061F8E667000E64DF6 /* SnapshotViewController.swift in Sources */,
+				015FFE802226CFAB00C51715 /* DFTGenericSearchViewController.swift in Sources */,
 				016AEF11221A9353003E4165 /* DFTTicketDetailViewController.swift in Sources */,
 				12E84FE51F4ECF220061C99E /* OnboardingManager.swift in Sources */,
 				7A9F6FF61F3883D3000A1815 /* SAPFioriLoadingIndicator.swift in Sources */,
@@ -541,10 +557,12 @@
 				12E07EF21E96851800460A94 /* CollectionType.swift in Sources */,
 				01757D8C22157EF0001A2ACF /* DFTCommentsTableViewCell.swift in Sources */,
 				01F88F282223CDE700A5B1C3 /* YPDrawSignatureView.swift in Sources */,
+				015FFE822226D4AB00C51715 /* DFTGenericSearchTableViewCell.swift in Sources */,
 				75AC42D41DAF824D00B445FF /* CollectionsViewController.swift in Sources */,
 				7A1315B91D4B982000A5DA56 /* AppDelegate.swift in Sources */,
 				48B89E13BC056A68C5A69562 /* GetFieldTicketDetailsStaticResolver.swift in Sources */,
 				023CFB32225799CBFA117704 /* GetFieldTicketDetailsFactory.swift in Sources */,
+				015FFE842226DA1000C51715 /* AttestTicketViewModel.swift in Sources */,
 				4DF6CB8D5AC0B2ABBEC3B381 /* GetFieldTicketDetailsMetadataParser.swift in Sources */,
 				535FE8622A95FC152C5A19C8 /* GetFieldTicketDetailsMetadataText.swift in Sources */,
 				07AA918E220E9B7E325AA08A /* GetFieldTicketDetailsMetadataChanges.swift in Sources */,
@@ -569,6 +587,8 @@
 				0128C3E9221B080E00528EBD /* ProfileCell.swift in Sources */,
 				01757D88221564E9001A2ACF /* CreateTicketViewModel.swift in Sources */,
 				01757D8622155360001A2ACF /* DFTCreateTableViewCell.swift in Sources */,
+				014A313022259B9200FFCDC3 /* NetworkManger.swift in Sources */,
+				015FFE86222710B300C51715 /* AttestInputModel.swift in Sources */,
 				01971A9C221039CD0088F991 /* TicketCell.swift in Sources */,
 				0128C3F2221C13D500528EBD /* Reviewer.swift in Sources */,
 				B16C27AAEC31374D2DEC4E5A /* DFTHeaderTypeMasterViewController.swift in Sources */,

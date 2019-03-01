@@ -17,7 +17,6 @@ class User {
     var id : String?
     var role : UserRole?
     var signatureUrl : String?
-    let urlSession = (UIApplication.shared.delegate as! AppDelegate).sapURLSession
 
     init() {}
     func setUserDetails(json : JSON) {
@@ -44,17 +43,16 @@ class User {
     
     func getSignatureUrl() {
     
-        var data : Data?
         var url = try!
-            URL(string: "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/DFTSignature?$filter=reviewerId eq '\(String(describing: User.shared.id!))'&$format=json".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+            URL(string: "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/getSignature.xsodata/DFTSignature?$filter=reviewerId eq '\(String(describing: User.shared.id!))'&$format=json".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         
         var urlRequest = try! URLRequest(url: url!, method: .get)
         
-        let dataTask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
             
             do {
                 let json : JSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! JSON
-                print(json) as! JSON
+                print(json)
                 guard let d = json["d"] as? JSON else{
                     return
                 }
@@ -64,8 +62,11 @@ class User {
                 guard let sign = results.last as? JSON else{
                     return
                 }
-                self.signatureUrl = sign["digitalSignatureUrl"] as? String
                 
+                let docID: String = URL(string: sign["digitalSignatureUrl"] as! String)!.lastPathComponent
+                let absUrl: String =  "https://docservicesx5qv5zg6ns.hana.ondemand.com/AppDownload/inctureDft/documents/download/" + docID
+                User.shared.signatureUrl = absUrl
+                self.signatureUrl = absUrl
             } catch let jsonError as NSError {
                 print(jsonError.userInfo)
             }
