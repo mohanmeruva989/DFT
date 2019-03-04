@@ -87,6 +87,7 @@ class DFTCreateNewTicketViewController: UIViewController {
         self.getLocationInfo()
         self.imagePickerController.delegate = self
         
+        self.commentsTextView.inputAccessoryView = toolbarPicker(mySelect: #selector(dismissPicker))
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -182,7 +183,7 @@ class DFTCreateNewTicketViewController: UIViewController {
                         print("Error in receiving headerId")
                         return
                     }
-                    var message : String = "DFT \(headerId)  has been created Successfully"
+                    var message : String = "Digital Field Ticket Created with ID - \(headerId) "
                     DispatchQueue.main.async {
                         
                         self.modalLoadingIndicatorView.dismiss()
@@ -243,7 +244,7 @@ class DFTCreateNewTicketViewController: UIViewController {
             "deviceType": "iOS",
             "deviceId": UIDevice.current.identifierForVendor?.description ?? "",
             "status": "Ticket Created",
-            "createdBy": User.shared.id ?? "",
+            "createdBy": User.shared.fullName ?? "",
             "updatedBy": "",
             "vendorRefNumber": self.dataModel.vendorRefNumber ?? "",
             "createdOn": self.dataModel.createdOn?.toString() ?? "",
@@ -295,9 +296,9 @@ class DFTCreateNewTicketViewController: UIViewController {
                 "activityId": "",
                 "dftNumber": "",
                 "wfInstanceId": "",
-                "status": "",
-                "createdOn": "2018-10-10T17:09:22.002Z",
-                "createdByName": ""
+                "status": "Ticket Created",
+                "createdOn": Date().description,
+                "createdByName": User.shared.fullName ?? ""
                 ]]
             ]
 
@@ -334,7 +335,6 @@ extension DFTCreateNewTicketViewController : UITableViewDataSource{
 
     }
     @objc func dismissPicker(){
-        print("alksdjf")
         view.endEditing(true)
     }
     

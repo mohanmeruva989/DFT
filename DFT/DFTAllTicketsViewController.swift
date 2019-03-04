@@ -34,9 +34,10 @@ class DFTAllTicketsViewController: UIViewController {
     }()
     @IBOutlet var addNewTicketButton: UIButton!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var searchButton: UIBarButtonItem!
     
     @IBAction func searchButtonTapped(_ sender: Any) {
-        self.navigationItem.rightBarButtonItem = nil
+        self.navigationItem.rightBarButtonItems = []
         //Animate the searchBar
         UIView.animate(withDuration: 0.3) {
             self.navigationItem.searchController = self.searchController
@@ -168,8 +169,8 @@ extension DFTAllTicketsViewController : UITableViewDataSource{
 extension DFTAllTicketsViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if User.shared.role == UserRole.Reviewer{
-        if let sc = self.navigationItem.searchController {
-            if sc.isActive{
+       
+            if self.navigationItem.searchController?.isActive == true {
                 self.selectedTicketNumber = String(self.filteredTickets![indexPath.row].dftNumber!)
                 self.selectedTicket = self.filteredTickets![indexPath.row]
                 self.navigationItem.searchController?.isActive = false
@@ -181,12 +182,11 @@ extension DFTAllTicketsViewController : UITableViewDelegate{
                 self.navigationItem.searchController = nil
                 self.performSegue(withIdentifier: "TicketDetail", sender: self)
             }
-        }
-        else {
-            self.selectedTicketNumber = String(self.allTickets[indexPath.row].dftNumber!)
-            self.selectedTicket = self.allTickets[indexPath.row]
-            self.performSegue(withIdentifier: "TicketDetail", sender: self)
-            }
+//        else {
+//            self.selectedTicketNumber = String(self.allTickets[indexPath.row].dftNumber!)
+//            self.selectedTicket = self.allTickets[indexPath.row]
+//            self.performSegue(withIdentifier: "TicketDetail", sender: self)
+//            }
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -209,6 +209,8 @@ extension DFTAllTicketsViewController : UISearchResultsUpdating{
 }
 extension DFTAllTicketsViewController : UISearchBarDelegate{
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.navigationItem.searchController = nil
+        self.navigationItem.rightBarButtonItem = self.searchButton
         self.navigationItem.searchController?.isActive = false
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

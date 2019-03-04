@@ -75,7 +75,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             configurationURL = URL(string: "https://mobile-hkea136m18.hana.ondemand.com/com.incture.dftxsodata")!
         }
         //Get the logged in User Details
-        let urlSession = self.sapURLSession
         let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.getloggedinUser.dest/services/userapi/attributes".asURL()
         let urlRequest = try! URLRequest(url: url, method: .get)
         let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
@@ -95,7 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     //Get Detailed user Info
     func getUserDetail(id : String){
-        let urlSession = self.sapURLSession
         let url = try! ("https://mobile-hkea136m18.hana.ondemand.com/InctureIDPDestination/service/scim/Users/" + id).asURL()
         let urlRequest = try! URLRequest(url: url, method: .get)
         let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
@@ -124,14 +122,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             func fetchDFTHeader(_ completionHandler: @escaping ([DFTHeaderType]?, Error?) -> Void) {
                 // Only request the first 20 values. If you want to modify the requested entities, you can do it here.
                 var queryFilter : QueryFilter
+                let query : DataQuery
                 if User.shared.role == UserRole.Reviewer{
                     queryFilter = DFTHeaderType.ownerID.equal(User.shared.id ?? "")
-                    allTicketsViewController.addNewTicketButton.isHidden = true
+                    DispatchQueue.main.async {
+                        allTicketsViewController.addNewTicketButton.isHidden = true
+                    }
+                    query = DataQuery().selectAll().where(queryFilter).filter(DFTHeaderType.status == "Ticket Created")
+
                     
                 }else{
                     queryFilter = DFTHeaderType.serviceProviderID.equal(User.shared.id ?? "")
+                    query = DataQuery().selectAll().where(queryFilter)
+
                 }
-                let query = DataQuery().selectAll().where(queryFilter)
+                
                 print("Query Tickets for \(User.shared.role.debugDescription)")
                 do {
                     self.getFieldTicketDetails!.fetchDFTHeader(matching: query) { dFTHeader, error in

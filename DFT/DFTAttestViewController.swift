@@ -10,6 +10,7 @@ import UIKit
 import SAPFiori
 import SAPOData
 import AlamofireImage
+import Alamofire
 
 class DFTAttestViewController: UIViewController {
     
@@ -160,14 +161,14 @@ class DFTAttestViewController: UIViewController {
 //            attachments.append(attach)
 //        }
 
-        let changeLog : JSON =  [
+        let changeLog : [JSON] =  [[
             "activityId": "",
             "dftNumber": self.ticket?.dftNumber?.description ?? "",
             "wfInstanceId": "",
             "status": self.ticket?.status ?? "",
             "createdOn": Date().description ,
             "createdByName": User.shared.fullName ?? ""
-            ]
+            ]]
   
         var comments : [JSON] = []
         for each in (self.ticket?.comments)!{
@@ -193,6 +194,9 @@ class DFTAttestViewController: UIViewController {
         return body
     }
     func verifyTicket() {
+        DispatchQueue.main.async {
+            self.modalLoadingIndicatorView.show(inView: self.view)
+        }
         var data : Data?
         let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.incture.basexsodata/updateFieldTicket.xsjs".asURL()
         var urlRequest = try! URLRequest(url: url, method: .post)
@@ -213,10 +217,11 @@ class DFTAttestViewController: UIViewController {
                 self.modalLoadingIndicatorView.dismiss()
                 var message = ""
                 if self.action == "Review"{
-                    message = "Ticket \(self.ticket!.dftNumber!.description) has been Verified successfully"
+                    message = "DFT \(self.ticket!.dftNumber!.description) has been Verified successfully"
+                    self.signAttachment()
                 }
                 else{
-                    message = "Ticket \(self.ticket!.dftNumber!.description) has been Rejected successfully"
+                    message = "DFT \(self.ticket!.dftNumber!.description) has been Rejected successfully"
                 }
                 let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: {_ in
@@ -260,6 +265,44 @@ class DFTAttestViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func signAttachment(){
+        let urlRequest = try! URLRequest(url: "https://mobile-hkea136m18.hana.ondemand.com/com.incture.documentService/updateAttachmentContent?approverId=\((self.ticket?.vendorID!.description)!))&fieldTicketNo=\((self.ticket?.dftNumber!.description)!)", method: .get)
+        DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
+
+            print("Merge Successful")
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+                print(json)
+            } catch let jsonError as NSError {
+                print(jsonError.userInfo)
+            }
+            
+            guard let _ = data, error == nil else {
+                print("Error in Updating DFT")
+                print(error.debugDescription)
+                return }
+            do {
+                print(response)
+            } catch let error as NSError {
+                print(error)
+            }
+        }.resume()
+        
+        
+//        Alamofire.request("\(BaseUrl.apiURL)/com.incture.documentService/updateAttachmentContent?approverId=\((self.ticket?.murphyEngineerId!)!))&fieldTicketNo=\((self.ticket?.FieldTicketNum!)!)", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
+//            .responseString{ response in
+//                if response.result.isSuccess{
+//                    print("File merging is success")
+//                }else{
+//                    print("File merging Failed")
+//                    
+//                }
+//                print(response)
+//                
+//        }
     }
 }
 extension DFTAttestViewController : UITableViewDataSource{

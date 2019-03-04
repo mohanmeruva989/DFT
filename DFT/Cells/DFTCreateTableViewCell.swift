@@ -31,6 +31,7 @@ class DFTCreateTableViewCell: UITableViewCell {
         super.awakeFromNib()
         self.cellTextField.delegate = self
         // Initialization code
+        self.selectionStyle = .none
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

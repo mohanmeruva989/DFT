@@ -121,13 +121,13 @@ extension DFTLocationViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "DFTLocationTableViewCell")
         as! DFTLocationTableViewCell
+        cell.cellButton.setTitle(tableValues![indexPath.row].name, for: .normal)
         cell.cellButton.titleLabel?.text = tableValues![indexPath.row].name
         cell.delegate = self
         return cell
         
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let SelectedItem :Location = tableValues![indexPath.row] as! Location
         
         if let temp = self.SelectedIndex{
             if temp == indexPath{

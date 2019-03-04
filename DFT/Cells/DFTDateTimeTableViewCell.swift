@@ -23,6 +23,8 @@ class DFTDateTimeTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     dateFormatter.dateFormat = "dd MMM yyyy"
+    self.selectionStyle = .none
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -40,15 +42,20 @@ class DFTDateTimeTableViewCell: UITableViewCell {
         case "StartDetails":
             self.label1.text = "Start Date *"
             self.label2.text = "Start Time"
-            
+            self.dataModel?.startDate = LocalDateTime.from(utc: Date() , in : TimeZone.current)
+            let dateTimeString : String = self.dataModel?.startDate?.toString() ?? ""
+            self.textField1.text =  convertTimeStamp(dateTimeString: dateTimeString)
         case "EndDetails":
             self.label1.text = "End Date *"
             self.label2.text = "End Time"
-
+            self.dataModel?.endDate = LocalDateTime.from(utc: Date() , in : TimeZone.current)
+            let dateTimeString : String = self.dataModel?.endDate?.toString() ?? ""
+            self.textField1.text =  convertTimeStamp(dateTimeString: dateTimeString)
 
         default:
             print("Invalid Cell identifier")
         }
+        
         self.textField1.placeholder = "--Select--"
         self.textField2.placeholder = "--Select--"
     }
@@ -82,11 +89,11 @@ class DFTDateTimeTableViewCell: UITableViewCell {
     @objc func handleTimeChange(sender: UIDatePicker){
         switch cellModel?.identifier {
         case "StartDetails":
-            self.dataModel?.startTime = LocalTime.from(utc: sender.date)
+            self.dataModel?.startTime = LocalTime.from(utc: sender.date, in: TimeZone.current)
             self.textField2.text =  LocalTime.from(utc: sender.date, in: TimeZone.current).toString()
         case "EndDetails":
             self.dataModel?.endTime = LocalTime.from(utc: sender.date, in: TimeZone.current)
-            self.textField2.text =  LocalTime.from(utc: sender.date).toString()
+            self.textField2.text =  LocalTime.from(utc: sender.date, in: TimeZone.current).toString()
         default:
             print("")
         }
