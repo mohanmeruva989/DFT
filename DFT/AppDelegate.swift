@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     
                 }else{
                     queryFilter = DFTHeaderType.serviceProviderID.equal(User.shared.id ?? "")
-                    query = DataQuery().selectAll().where(queryFilter)
+                    query = DataQuery().selectAll().where(queryFilter).filter(DFTHeaderType.status == "Ticket Created")
 
                 }
                 

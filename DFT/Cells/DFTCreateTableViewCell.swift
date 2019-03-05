@@ -50,6 +50,7 @@ class DFTCreateTableViewCell: UITableViewCell {
             self.cellTextField?.text = self.dataModel?.vendorRefNumber ?? ""
             self.cellTextField.isUserInteractionEnabled = true
             self.cellTextField.inputAccessoryView = toolBar
+            self.cellTextField.placeholder = "--Enter--"
         case "Department":
             let pickerView = UIPickerView()
             self.departments = ["", "Operations", "Capital Projects" , "Maintainence"]
@@ -60,6 +61,7 @@ class DFTCreateTableViewCell: UITableViewCell {
             pickerView.tag = 0
             self.cellTextField.inputAccessoryView = toolBar
             self.cellTextField.isUserInteractionEnabled = true
+            self.cellTextField.placeholder = "--Select--"
 
         case "Reviewer":
             let pickerView = UIPickerView()
@@ -77,8 +79,10 @@ class DFTCreateTableViewCell: UITableViewCell {
             pickerView.delegate = self
             pickerView.tag = 1
             self.cellTextField.isUserInteractionEnabled = true
+            self.cellTextField.placeholder = "--Select--"
 
         case "Location" :
+            self.cellTextField.placeholder = "--Select--"
             self.cellTextField.isUserInteractionEnabled = true
 
             var location : String = ""

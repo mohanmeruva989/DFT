@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.5122859"
+            timestampString = "573470231.698066"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "30"
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.51256"
+            timestampString = "573470231.698253"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "39"
@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/AppDelegate.swift"
-            timestampString = "573384687.510197"
+            timestampString = "573470231.698311"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "142"
@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/ProfileViewController.swift"
-            timestampString = "573060747.513166"
+            timestampString = "573470231.6983629"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.187232"
+            timestampString = "573470231.6989239"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "textFieldDidEndEditing(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.187328"
+            timestampString = "573470231.699003"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "38"
@@ -170,7 +170,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTLocationViewController.swift"
-            timestampString = "573384687.513034"
+            timestampString = "573398597.829771"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
@@ -186,7 +186,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTLocationViewController.swift"
-            timestampString = "573384687.516565"
+            timestampString = "573398597.8304369"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "119"
@@ -202,7 +202,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTLocationViewController.swift"
-            timestampString = "573384687.517193"
+            timestampString = "573398597.8307281"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
@@ -218,7 +218,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTLocationViewController.swift"
-                  timestampString = "573129681.531042"
+                  timestampString = "573470232.226855"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
@@ -233,7 +233,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTLocationViewController.swift"
-                  timestampString = "573129681.534055"
+                  timestampString = "573470232.230298"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTLocationViewController.swift"
-            timestampString = "573384687.517906"
+            timestampString = "573398597.831028"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "61"
@@ -282,7 +282,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.190174"
+            timestampString = "573470231.699187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "662"
@@ -298,7 +298,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.190262"
+            timestampString = "573470231.699241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "631"
@@ -314,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.19033"
+            timestampString = "573470231.699291"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "677"
@@ -330,7 +330,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.1903991"
+            timestampString = "573470231.69935"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "681"
@@ -346,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.190467"
+            timestampString = "573470231.699407"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "674"
@@ -362,7 +362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.190534"
+            timestampString = "573470231.699455"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "281"
@@ -378,7 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.1906"
+            timestampString = "573470231.699502"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "39"
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.19068"
+            timestampString = "573398597.831467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "getAttachments()"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.1907769"
+            timestampString = "573398597.832126"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "getAttachments()"
             landmarkType = "7">
             <Locations>
@@ -458,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.190842"
+            timestampString = "573398597.832451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
             landmarkName = "getAttachments()"
             landmarkType = "7">
          </BreakpointContent>
@@ -474,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.1909029"
+            timestampString = "573398597.8327661"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "getAttachments()"
             landmarkType = "7">
             <Locations>
@@ -518,17 +518,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.190977"
+            timestampString = "573398597.833107"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "getAttachments()"
-            landmarkType = "7">
+            startingLineNumber = "294"
+            endingLineNumber = "294">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -538,11 +536,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.191043"
+            timestampString = "573470231.699675"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "pickerView(_:numberOfRowsInComponent:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,11 +552,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.1911041"
+            timestampString = "573470231.699734"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "setData(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,7 +568,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.522459"
+            timestampString = "573470231.6997809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "25"
@@ -618,7 +616,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.191419"
+            timestampString = "573470231.699878"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "130"
@@ -634,7 +632,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/TicketCell.swift"
-            timestampString = "573369329.411867"
+            timestampString = "573398597.833534"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "78"
@@ -694,65 +692,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.192713"
+            timestampString = "573398597.833822"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
-            landmarkName = "getAttachments()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.192795"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "ticketComments"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DFT.DFTTicketDetailViewController.ticketComments.didset : Swift.Optional&lt;Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Any&gt;&gt;&gt;"
-                  moduleName = "DFT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTTicketDetailViewController.swift"
-                  timestampString = "573129681.63054"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "41">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in DFT.DFTTicketDetailViewController.ticketComments.didset : Swift.Optional&lt;Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Any&gt;&gt;&gt;"
-                  moduleName = "DFT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTTicketDetailViewController.swift"
-                  timestampString = "573129681.633042"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "convertTimeStamp(dateTimeString:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -762,7 +712,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.531709"
+            timestampString = "573470231.70004"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
@@ -810,7 +760,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.192991"
+            timestampString = "573470231.700088"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "187"
@@ -826,7 +776,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTCreateNewTicketViewController.swift"
-                  timestampString = "573129681.6484931"
+                  timestampString = "573470232.332935"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "187"
@@ -841,7 +791,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTCreateNewTicketViewController.swift"
-                  timestampString = "573129681.650956"
+                  timestampString = "573470232.335938"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "189"
@@ -874,7 +824,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.193167"
+            timestampString = "573470231.7001621"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "97"
@@ -890,7 +840,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.193256"
+            timestampString = "573470231.700212"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
@@ -906,7 +856,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.193341"
+            timestampString = "573470231.70026"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "61"
@@ -922,11 +872,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.1934201"
+            timestampString = "573470231.700308"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "181"
-            endingLineNumber = "181"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
             landmarkName = "textFieldShouldReturn(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -938,11 +888,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.193508"
+            timestampString = "573470231.700351"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "textFieldDidEndEditing(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -954,11 +904,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.193578"
+            timestampString = "573470231.700394"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "textFieldDidBeginEditing(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -992,22 +942,6 @@
             startingLineNumber = "399"
             endingLineNumber = "399"
             landmarkName = "textFieldShouldReturn(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DFT/ProfileViewController.swift"
-            timestampString = "573060747.538708"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
-            landmarkName = "onDigitalSignPress(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1078,48 +1012,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DFT/ProfileViewController.swift"
-            timestampString = "573060747.539768"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
-            landmarkName = "onDigitalSignPress(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.540291"
+            timestampString = "573470231.700528"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
             endingLineNumber = "55"
             landmarkName = "getSignatureUrl()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DFT/ImageVerifyController.swift"
-            timestampString = "573384687.519153"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "dismissScreen()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1146,7 +1048,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTGenericSearchViewController.swift"
-                  timestampString = "573129681.746471"
+                  timestampString = "573470232.3963571"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "29"
@@ -1161,7 +1063,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTGenericSearchViewController.swift"
-                  timestampString = "573129681.749519"
+                  timestampString = "573470232.4000731"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "29"
@@ -1242,7 +1144,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTGenericSearchViewController.swift"
-                  timestampString = "573129681.779587"
+                  timestampString = "573470232.427909"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "91"
@@ -1257,7 +1159,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/DFTGenericSearchViewController.swift"
-                  timestampString = "573129681.784005"
+                  timestampString = "573470232.430722"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "91"
@@ -1306,7 +1208,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTCreateNewTicketViewController.swift"
-            timestampString = "573130085.195413"
+            timestampString = "573470231.700725"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "327"
@@ -1338,7 +1240,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/Cells/DFTDateTimeTableViewCell.swift"
-                  timestampString = "573129681.81286"
+                  timestampString = "573470232.458732"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "41"
@@ -1353,7 +1255,7 @@
                   moduleName = "DFT"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mohan/Documents/Murphy/DFT_Incture/DFT/DFT/Cells/DFTDateTimeTableViewCell.swift"
-                  timestampString = "573129681.816071"
+                  timestampString = "573470232.462127"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "41"
@@ -1386,11 +1288,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/Cells/DFTCreateTableViewCell.swift"
-            timestampString = "573130085.195623"
+            timestampString = "573470231.700822"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "dismissPicker()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1414,27 +1316,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DFT/ProfileViewController.swift"
-            timestampString = "573060747.551514"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
-            landmarkName = "onDigitalSignPress(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.5517319"
+            timestampString = "573470231.700894"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
@@ -1449,30 +1335,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DFT/DigitalSignatureController.swift"
-            timestampString = "573384687.520757"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "211"
-            endingLineNumber = "211"
-            landmarkName = "callDocumentService(signatureImage:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "DFT/ImageVerifyController.swift"
-            timestampString = "573384687.5212719"
+            timestampString = "573470231.701003"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
             endingLineNumber = "35"
-            landmarkName = "getSignature()"
-            landmarkType = "7">
+            landmarkName = "ImageVerifyController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1482,7 +1352,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/User.swift"
-            timestampString = "573060747.554388"
+            timestampString = "573470231.7010649"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
@@ -1494,15 +1364,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/DFTTicketDetailViewController.swift"
-            timestampString = "573130085.196504"
+            timestampString = "573398597.836091"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1510,11 +1380,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DFT/TicketCell.swift"
-            timestampString = "573369329.4149441"
+            timestampString = "573398597.836418"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
@@ -1536,6 +1406,86 @@
             startingLineNumber = "295"
             endingLineNumber = "295"
             landmarkName = "signAttachment()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DFT/DFTTicketDetailViewController.swift"
+            timestampString = "573398597.836494"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DFT/DFTTicketDetailViewController.swift"
+            timestampString = "573398597.836879"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DFT/DFTTicketDetailViewController.swift"
+            timestampString = "573398597.837184"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DFT/DFTTicketDetailViewController.swift"
+            timestampString = "573398597.83751"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
+            landmarkName = "convertTimeStamp(dateTimeString:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DFT/DFTTicketDetailViewController.swift"
+            timestampString = "573398597.837821"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

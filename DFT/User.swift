@@ -43,10 +43,10 @@ class User {
     
     func getSignatureUrl() {
     
-        var url = try!
+        let url = try!
             URL(string: "https://mobile-hkea136m18.hana.ondemand.com/com.dft.xsodata/getSignature.xsodata/DFTSignature?$filter=reviewerId eq '\(String(describing: User.shared.id!))'&$format=json".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         
-        var urlRequest = try! URLRequest(url: url!, method: .get)
+        let urlRequest = try! URLRequest(url: url!, method: .get)
         
         let dataTask = DFTNetworkManager.shared.sapUrlSession.dataTask(with: urlRequest) { (data, response, error) in
             
@@ -59,7 +59,7 @@ class User {
                 guard let results = d["results"] as? [JSON] else{
                     return
                 }
-                guard let sign = results.last as? JSON else{
+                guard let sign = results.last else{
                     return
                 }
                 
