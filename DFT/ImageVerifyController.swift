@@ -8,16 +8,17 @@
 
 import UIKit
 import Alamofire
-
+import SAPFiori
 class ImageVerifyController: UIViewController {
 
     @IBOutlet var signatureImage: UIImageView!
     @IBOutlet var disclaimerView: UITextView!
     
+    var modalLoadingIndicatorView = FUIModalLoadingIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
         createNavBar()
-        getSignature()
+//        getSignature()
 //        let htmlText = "<ul style = 'color : #868686 ; font-size : 14;'><li><i>All Commercial Terms are to be in accordance to Murphy Oil MSA and originating Work Order.</i></li><li><i>Field/Wellsite Operations Stamp is a confirmation of services/materials received only.</i></li></ul>"
 //        let attrStr = try! NSAttributedString(
 //            data: htmlText.data(using: String.Encoding.unicode, allowLossyConversion: true)!,
@@ -65,9 +66,25 @@ class ImageVerifyController: UIViewController {
     
     ///Dft_SignatureSet?$filter=ApproverId eq '77'
 //
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.modalLoadingIndicatorView.show(inView: self.view)
+        }
+
+        self.getSignature()
+    }
     func getSignature() {
+        
             if let url: String = User.shared.signatureUrl{
-            self.signatureImage.af_setImage(withURL: URL(string: url)!)}
+            self.signatureImage.af_setImage(withURL: URL(string: url)!)
+            
+                self.signatureImage.af_setImage(withURL: URL(string: url)!, placeholderImage: UIImage(named: "Imageplaceholder"), filter: nil, progress: nil, progressQueue: DispatchQueue.main, imageTransition: UIImageView.ImageTransition.curlUp(0.3), runImageTransitionIfCached: false, completion: {_ in
+                    DispatchQueue.main.async {
+                        self.modalLoadingIndicatorView.dismiss()
+                    }
+                })
+                
+            }
             else{
             let splitViewController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DigitalSignatureController") as! DigitalSignatureController
                 let navCont = UINavigationController(rootViewController: splitViewController)

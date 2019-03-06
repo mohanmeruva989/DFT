@@ -183,7 +183,7 @@ class DFTCreateNewTicketViewController: UIViewController {
                         print("Error in receiving headerId")
                         return
                     }
-                    var message : String = "Digital Field Ticket Created with ID - \(headerId) "
+                    var message : String = "Digital Field Ticket Created with \n ID - \(headerId) "
                     DispatchQueue.main.async {
                         
                         self.modalLoadingIndicatorView.dismiss()

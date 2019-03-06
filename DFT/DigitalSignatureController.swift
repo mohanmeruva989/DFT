@@ -103,7 +103,9 @@ class DigitalSignatureController: UIViewController {
         do{
             var data : Data?
             let url = try! "https://mobile-hkea136m18.hana.ondemand.com/com.incture.basexsodata/createSignature.xsjs".asURL()
-            self.modalLoadingIndicatorView.show(inView: self.view)
+            DispatchQueue.main.async {
+                self.modalLoadingIndicatorView.show(inView: self.view)
+            }
             let payload :JSON = [
                 "reviewerId": User.shared.id ?? "",
                 "version": "",
@@ -126,17 +128,20 @@ class DigitalSignatureController: UIViewController {
                 DispatchQueue.main.async {
                     self.modalLoadingIndicatorView.dismiss()
                 }
+             
                 
                 do {
-                    let json : [[String : Any]] = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String : Any]]
+                    let json : [String : Any] = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : Any]
                     //                    print(json)
                     
-                    for each in json{
-                        if let documentDetailDto = each["documentDetailDto"] as? [String : Any]{
+                        if let documentDetailDto = json["documentDetailDto"] as? [String : Any]{
                             print(User.shared.signatureUrl)
-                        }
+                        
                     }
-                    self.postDigitalSignature()
+                    DispatchQueue.main.async {
+                        self.dismissScreen()
+                    }
+                    
                 } catch let jsonError as NSError {
                     print(jsonError.userInfo)
                 }
@@ -175,7 +180,7 @@ class DigitalSignatureController: UIViewController {
 //            var finalMixedImage = getMixedImg(image1 : attachImage!, image2: signatureImage)
             
             
-            loaderStart()
+//            loaderStart()
             self.callDocumentService(signatureImage: signatureImage)
             
             // Saving signatureImage from the line above to the Photo Roll.
